@@ -1,16 +1,18 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignIn from "../pages/SignIn";
-import { isAuthenticated } from "./auth.routes";
-
-const PrivateRoute = ({ path, element: Component, ...rest }) => (
-    <Route {...rest} Component />
-)
+import Dashboard from "../pages/Dashboard";
+import Error from "../pages/Error";
+import PrivateRoute from './private.routes';
 
 const AppRoutes = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <PrivateRoute path="/" component/>
+                <Route path="/app" element={<PrivateRoute />}>
+                    <Route path='' element={<Dashboard/>}/>
+                    <Route path='' element={<Error/>}/>
+                </Route>
+                <Route path="/" element={<SignIn />}/>
             </Routes>
         </BrowserRouter>
     );
