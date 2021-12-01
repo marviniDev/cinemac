@@ -1,6 +1,6 @@
 function Error() {
     return (
-        <></>
+        <>hello</>
     );
 }
 

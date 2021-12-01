@@ -1,38 +1,48 @@
-import { SectionLogin, MainLogin, ContainerLogin, HeaderLogin, FormLogin, Login } from "./style";
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { SectionLogin, MainLogin, ContainerLogin, HeaderLogin, FormLogin, Login } from './style';
 import Logo from '../../assets/img/icon-circle-blue.png';
+import AuthContext from '../../contexts/auth';
 
 const SignIn = () => {
+  const { signed, signIn } = useContext(AuthContext);
+
+  console.log(signed);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    signIn();
+  }
+
   return (
     <SectionLogin>
       <MainLogin>
         <ContainerLogin>
           <HeaderLogin>
-            <h1 class="font white-text suave active">
+            <h1 className="font white-text suave active">
               Cinemac
-              <div class="divider white"></div>
+              <div className="divider white"></div>
             </h1>
-            <p class="white-text suave condesed active">
+            <p className="white-text suave condesed active">
               O gerenciador de cinemas feito para você!
             </p>
           </HeaderLogin>
           <Login>
-            <div id="loading" class="suave white active">
-              <div class="central">
-                <h6 class="mini-title center-align"><b class="purpler-text">Aguarde...</b></h6>
-                <div class="progress blue-grey lighten-4">
-                  <div class="indeterminate cor1"></div>
+            <div id="loading" className="suave white active">
+              <div className="central">
+                <h6 className="mini-title center-align"><b className="purpler-text">Aguarde...</b></h6>
+                <div className="progress blue-grey lighten-4">
+                  <div className="indeterminate cor1"></div>
                 </div>
               </div>
             </div>
             <div className="loginHeader">
-              {/* <img src={Logo} /> */}
-              <h3>Entrar</h3>
+              <img src={Logo} alt="logo cinemac" />
+              <h3>LOGIN</h3>
             </div>
 
-            <form className="loginForm active">
+            <FormLogin className="loginForm active" onSubmit={handleSubmit}>
               <div className="input-fild">
-                <label htmlFor="email">EMAIL</label>
+                <label htmlFor="email">E-MAIL</label>
                 <input type="email" name="email" id="email" placeholder="usuario@gmail.com" />
               </div>
 
@@ -42,11 +52,9 @@ const SignIn = () => {
               </div>
 
               <div className="button">
-                <Link to="/app">
-                  <button type="submit">Entrar</button>
-                </Link>
+                <button type="submit">Entrar</button>
               </div>
-            </form>
+            </FormLogin>
           </Login>
         </ContainerLogin>
       </MainLogin>

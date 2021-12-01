@@ -32,7 +32,7 @@ export default createGlobalStyle`
   }
 
   * {
-    font-family:'Sans-serif';
+    font-family:'Roboto';
     margin: 0;
     padding: 0;
     outline: 0; 
@@ -105,13 +105,14 @@ export default createGlobalStyle`
     font-style: normal;
     font-weight: 400;
     line-height: 1.5;
-    font-size: 2.71vh;
     color: #625e7b;
     border: 0.15em solid #e8e8e8;
     box-sizing: border-box;
     border-radius: 0.35em;
-    padding: 0.3em 0.2em;
     cursor: auto;
+    padding: 0.3em 0.7em;
+    font-size: 0.8em;
+    margin-top: 0.4em;
   }
   
   /* input::after {
@@ -145,9 +146,18 @@ export default createGlobalStyle`
     display: flex;
     justify-content: center;
     align-items: center;
-    border: none;
-    border-radius:var(--border-radius);
     cursor: pointer;
+    font-size: 0.875em;
+    background: #6271ff;
+    padding: 0.5em;
+    border-radius: 0.25em;
+    border: none;
+    /* border: solid #6271ff 0.125em; */
+    transition: background 0.3s;
+    text-transform: uppercase;
+    color: #fff;
+    box-shadow: 0 0 0.25em rgb(0 0 0 / 25%);
+    width: 100%;
     :hover{
       transition:.3s;
       filter:opacity(.9);

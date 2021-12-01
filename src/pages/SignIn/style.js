@@ -43,23 +43,46 @@ export const ContainerLogin = styled.div`
   flex: 1 1 auto;
 `;
 export const Login = styled.div`
-  z-index: 3;
-  color: #262626;
-  color: rgba(var(--i1d,38,38,38),1);
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  margin-top: 12px;
+  background-color: white;
+  z-index: 3;
+  border-radius: 0.5em;
+  align-items: center;
+  position: relative;
+  padding: 1em;
   max-width: 350px;
+  -webkit-box-shadow: 0px 10px 20px 0px rgba(50, 50, 50, 0.52);
+	-moz-box-shadow:    0px 10px 20px 0px rgba(50, 50, 50, 0.52);
+	box-shadow:         0px 10px 20px 0px rgba(50, 50, 50, 0.52);
+
+  #loading{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .loginHeader{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+    margin: 1em 0em;
+    
+    img{width:25%;}
+  }
 `;
 export const HeaderLogin = styled.div`
   color: #ffffff;
   z-index: 3;
+  display: none;
 
   h1{
     margin-bottom: .5em;
@@ -75,7 +98,30 @@ export const HeaderLogin = styled.div`
       border-radius: 1em;
     }
   }
+
+  @media screen and (min-width: 1024px){
+    display: block;
+  }
 `;
 export const FormLogin = styled.form`
   z-index: 3;
+
+  .input-fild{
+    margin-bottom: 1em;
+  }
+
+  .input-fild label{
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 0.75em;
+    line-height: 0.875em;
+    color: var(--main-fn-color1);
+    padding: 0 0 0.5em 0;
+  }
+
+  .button{
+    button{
+      background: linear-gradient(180deg, #25C8BC 0%, #0383C4 100%);
+    }
+  }
 `;
