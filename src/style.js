@@ -32,7 +32,7 @@ export default createGlobalStyle`
   }
 
   * {
-    font-family:'Roboto';
+    font-family:'Sans-serif';
     margin: 0;
     padding: 0;
     outline: 0; 
@@ -46,7 +46,33 @@ export default createGlobalStyle`
   html, body, #root {
     width:100vw;
     height: 100vh;
+    font-size: 2.7vh;
   }
+
+  #react-root, article, div, footer, header, main, nav, section {
+    /* -webkit-box-align: stretch;
+    -webkit-align-items: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    border: 0 solid #000;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0;
+    position: relative; */
+}
   
   body {
     transition: 0.2s linear;
@@ -75,12 +101,17 @@ export default createGlobalStyle`
   }
 
   input,select{
-    background-color:var(--cor-bg-menu);
-    color:var(--cor-principal);
-    border: 2px solid var(--cor-border-input);
+    width: 100%;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.5;
+    font-size: 2.71vh;
+    color: #625e7b;
+    border: 0.15em solid #e8e8e8;
     box-sizing: border-box;
-    font-weight:700;
-    border-radius:var(--border-radius);
+    border-radius: 0.35em;
+    padding: 0.3em 0.2em;
+    cursor: auto;
   }
   
   /* input::after {
