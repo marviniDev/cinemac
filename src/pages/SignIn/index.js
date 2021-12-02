@@ -1,16 +1,17 @@
 import React, { useContext } from 'react';
+import { Route, Redirect} from "react-router-dom"
 import { SectionLogin, MainLogin, ContainerLogin, HeaderLogin, FormLogin, Login } from './style';
 import Logo from '../../assets/img/icon-circle-blue.png';
 import AuthContext from '../../contexts/auth';
+import * as Auth from '../../services/auth';
 
 const SignIn = () => {
-  const { signed, signIn } = useContext(AuthContext);
-
-  console.log(signed);
+  const { signed, setSigned } = useContext(AuthContext);
 
   async function handleSubmit(e) {
-    e.preventDefault();
-    signIn();
+    setSigned(true)
+    console.log(signed);
+    localStorage.setItem('@app::user', JSON.stringify('a'))
   }
 
   return (
@@ -39,8 +40,8 @@ const SignIn = () => {
               <img src={Logo} alt="logo cinemac" />
               <h3>LOGIN</h3>
             </div>
-
-            <FormLogin className="loginForm active" onSubmit={handleSubmit}>
+            {signed == true ? <Redirect to='/app'/> : null}
+            <FormLogin className="loginForm active">
               <div className="input-fild">
                 <label htmlFor="email">E-MAIL</label>
                 <input type="email" name="email" id="email" placeholder="usuario@gmail.com" />
@@ -52,7 +53,7 @@ const SignIn = () => {
               </div>
 
               <div className="button">
-                <button type="submit">Entrar</button>
+                <button type="button" onClick={handleSubmit}>Entrar</button>
               </div>
             </FormLogin>
           </Login>
