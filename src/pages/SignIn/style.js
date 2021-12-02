@@ -52,7 +52,6 @@ export const Login = styled.div`
   align-items: center;
   position: relative;
   padding: 1em;
-  max-width: 350px;
   -webkit-box-shadow: 0px 10px 20px 0px rgba(50, 50, 50, 0.52);
 	-moz-box-shadow:    0px 10px 20px 0px rgba(50, 50, 50, 0.52);
 	box-shadow:         0px 10px 20px 0px rgba(50, 50, 50, 0.52);
@@ -77,6 +76,27 @@ export const Login = styled.div`
     margin: 1em 0em;
     
     img{width:25%;}
+  }
+
+  .form-demo .card {
+    min-width: 450px;
+  }
+  .form-demo .card form {
+    margin-top: 2rem;
+  }
+  .form-demo .card .p-field {
+    margin-bottom: 1.5rem;
+  }
+  @media screen and (max-width: 960px) {
+    .form-demo .card {
+        width: 80%;
+    }
+  }
+  @media screen and (max-width: 640px) {
+    .form-demo .card {
+        width: 100%;
+        min-width: 0;
+    }
   }
 `;
 export const HeaderLogin = styled.div`
