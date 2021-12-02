@@ -1,4 +1,7 @@
 import { createGlobalStyle } from "styled-components";
+import "primereact/resources/themes/lara-light-indigo/theme.css"
+import "primereact/resources/primereact.min.css"
+import "primeicons/primeicons.css"
 
 export default createGlobalStyle`
   :root{
@@ -46,7 +49,7 @@ export default createGlobalStyle`
   html, body, #root {
     width:100vw;
     height: 100vh;
-    font-size: 2.7vh;
+    font-size: 1.6649323621227887vh;
   }
 
   #react-root, article, div, footer, header, main, nav, section {
