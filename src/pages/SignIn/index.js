@@ -1,10 +1,9 @@
-import { Route, Redirect } from "react-router-dom"
-import React, { useContext, useEffect, useState } from 'react';
+import { Redirect } from "react-router-dom"
+import React, { useContext } from 'react';
 
-import { SectionLogin, MainLogin, ContainerLogin, HeaderLogin, FormLogin, Login } from './style';
+import { SectionLogin, MainLogin, ContainerLogin, HeaderLogin, Login } from './style';
 import Logo from '../../assets/img/icon-circle-blue.png';
 import AuthContext from '../../contexts/auth';
-import * as Auth from '../../services/auth';
 
 import { useFormik } from 'formik';
 import { InputText } from 'primereact/inputtext';
@@ -45,7 +44,7 @@ const SignIn = () => {
 }
 
 const FormikFormLogin = ({onSubmit}) => {
-  const [formData, setFormData] = useState({});
+  // const [formData, setFormData] = useState({});
 
   const formik = useFormik({
     initialValues: {

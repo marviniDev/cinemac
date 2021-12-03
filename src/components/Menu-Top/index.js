@@ -1,6 +1,5 @@
 import React from "react";
 import { TopBar, Flex, Icon } from "./style";
-import { Link } from "react-router-dom";
 import { Avatar } from "primereact/avatar";
 import { Menubar } from 'primereact/menubar';
 import Logo from "../../assets/img/icon-square-blue.jpg"

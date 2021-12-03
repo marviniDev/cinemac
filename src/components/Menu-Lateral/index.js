@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MenuDiv, TitleMenu } from "./style";
 import DarkMode from "../Darkmode";
 import { NavLink } from "react-router-dom";
-import MovieIcon from '@mui/icons-material/Movie';
+// import MovieIcon from '@mui/icons-material/Movie';
 
 function Menu({setRefenceTitlePage}) {
   const [themeColor, setThemeColor] = useState(sessionStorage.getItem("color") ? sessionStorage.getItem("color") : "#6271ff");
@@ -18,27 +18,27 @@ function Menu({setRefenceTitlePage}) {
     window.location.reload();
   }
 
-  const handleClick = e => {
-    const index = parseInt(e.target.id, 0)
-    const title = e.target.title;
-    if (index !== clicked) {
-      setClicked(index)
-      sessionStorage.setItem("itemSelected",index)
-      setRefenceTitlePage(title)
-    }
-  }
+  // const handleClick = e => {
+  //   const index = parseInt(e.target.id, 0)
+  //   const title = e.target.title;
+  //   if (index !== clicked) {
+  //     setClicked(index)
+  //     sessionStorage.setItem("itemSelected",index)
+  //     setRefenceTitlePage(title)
+  //   }
+  // }
 
   const ItemMenu = () => {
     return(
       <ul className="menu-body">
         <NavLink to="/app/filmes">
-          <li><MovieIcon/>Filmes</li>
+          <li>Filmes</li>
         </NavLink>
         <NavLink to="/app/sessoes">
-          <li><Icon>LocalMovies</Icon>Sessões</li>
+          <li>Sessões</li>
         </NavLink>
         <NavLink to="/app/salas">
-          <li><Icon>MeetingRoom</Icon>Salas</li>
+          <li>Salas</li>
         </NavLink>
       </ul>
     )
