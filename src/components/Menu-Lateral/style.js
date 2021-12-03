@@ -1,11 +1,12 @@
 import styled from "styled-components";
 
 export const MenuDiv = styled.div`
-  width: 17em;
+  width: 20em;
   height: 100%;
   position: relative;
   background-color: var(--cor-bg-menu);
-  box-shadow: 0px 0px 30px 0px rgb(0 0 0 / 25%);
+  -webkit-box-shadow: 1px 4px 5px 1px #858585; 
+box-shadow: 1px 4px 5px 1px #858585;
   display: flex;
   flex-direction: column;
 
@@ -50,8 +51,8 @@ export const MenuDiv = styled.div`
     }
 
     li {
-      width: 95%;
-      border-radius: 0 32px 32px 0;
+      margin: 0em 1em;
+      border-radius: 5px;
       height: 44px;
       list-style: none;
       padding: 1rem;
@@ -72,9 +73,12 @@ export const MenuDiv = styled.div`
       }
     }
 
-    li.active{
-      color:var(--cor-fonts-secundary);
-      background-color:var(--cor-principal);
+    a.active{
+      li{
+        color:var(--cor-fonts-secundary);
+        background-color:var(--cor-principal);
+
+      }
     }
   }
 
@@ -212,4 +216,8 @@ export const MenuDiv = styled.div`
       transform: rotate(180deg);
     }
   }
+`;
+
+export const TitleMenu = styled.h4`
+  margin: 2em 1em 1em 1em;
 `;

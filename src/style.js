@@ -146,7 +146,7 @@ export default createGlobalStyle`
   }
 
   button {
-    display: flex;
+    /* display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
@@ -154,17 +154,17 @@ export default createGlobalStyle`
     background: #6271ff;
     padding: 0.5em;
     border-radius: 0.25em;
-    border: none;
+    border: none; */
     /* border: solid #6271ff 0.125em; */
-    transition: background 0.3s;
+    /* transition: background 0.3s;
     text-transform: uppercase;
     color: #fff;
-    box-shadow: 0 0 0.25em rgb(0 0 0 / 25%);
-    width: 100%;
-    :hover{
+    box-shadow: 0 0 0.25em rgb(0 0 0 / 25%); */
+    /* width: 100%; */
+    /* :hover{
       transition:.3s;
       filter:opacity(.9);
-    }
+    } */
   }
   
   /* i{position: relative;}

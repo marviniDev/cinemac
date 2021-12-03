@@ -4,16 +4,14 @@ export const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+    flex-direction: column;
 `;
 
-export const LeftContent = styled.div``;
-
-export const RightContent = styled.div`
-  width: calc(100% - 17em);
+export const FlexContent = styled.div`
+  width: 100%;
   position: relative;
   height: 100%;
   display: flex;
-  flex-direction: column;
 `;
 
 export const Main = styled.div`

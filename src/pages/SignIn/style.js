@@ -43,9 +43,7 @@ export const ContainerLogin = styled.div`
   flex: 1 1 auto;
 `;
 export const Login = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  max-width: 30vh;
   background-color: white;
   z-index: 3;
   border-radius: 0.5em;
@@ -79,19 +77,23 @@ export const Login = styled.div`
   }
 
   .form-demo .card {
-    min-width: 450px;
+    min-width: 100%;
   }
-  .form-demo .card form {
-    margin-top: 2rem;
+
+  .btn-login{
+    background-color: #5d9fd6 !important;
   }
+
   .form-demo .card .p-field {
     margin-bottom: 1.5rem;
   }
+
   @media screen and (max-width: 960px) {
     .form-demo .card {
         width: 80%;
     }
   }
+
   @media screen and (max-width: 640px) {
     .form-demo .card {
         width: 100%;

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { MenuDiv } from "./style";
-import Avatar from "./components/Avatar";
-import Title from "../Title";
+import { MenuDiv, TitleMenu } from "./style";
 import DarkMode from "../Darkmode";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import MovieIcon from '@mui/icons-material/Movie';
 
 function Menu({setRefenceTitlePage}) {
   const [themeColor, setThemeColor] = useState(sessionStorage.getItem("color") ? sessionStorage.getItem("color") : "#6271ff");
@@ -32,54 +31,22 @@ function Menu({setRefenceTitlePage}) {
   const ItemMenu = () => {
     return(
       <ul className="menu-body">
-        <li onClick={handleClick} className={`item-menu ${parseInt(clicked) === 0? "active":""}`} id={0} title={"Promissórias"}>
-          <i className="material-icons">widgets</i>Promissórias
-        </li>
-        <li onClick={handleClick} className={`item-menu ${parseInt(clicked) === 1? "active":""}`} id={1} title={"Emissão de recibos"}>
-          <i className="material-icons">playlist_play</i>Emissão de recibos
-        </li>
-        <Link to="/dashboard">
-          <li onClick={handleClick} className={`item-menu ${parseInt(clicked) === 2? "active":""}`} id={2} title={"Transferência de veículo"}>
-            <i className="material-icons">transfer_within_a_station</i>Transferência de veículo
-          </li>
-        </Link>
-          <li onClick={handleClick} className={`item-menu ${parseInt(clicked) === 3? "active":""}`} id={3} title={"Fases da Transferência"}>
-            <i className="material-icons">view_week</i>Fases da Transferência
-          </li>
-        <Link to="/dashboard/veiculos">
-          <li onClick={handleClick} className={`item-menu ${parseInt(clicked) === 4? "active":""}`} id={4} title={"Veículo"}>
-            <i className="material-icons">drive_eta</i>Veículos
-          </li>
-        </Link>
-        <Link to="/dashboard/clientes">
-          <li onClick={handleClick} className={`item-menu ${parseInt(clicked) === 5? "active":""}`} id={5} title={"Clientes"}>
-            <i className="material-icons">people</i>Clientes
-          </li>
-        </Link>
-        <li onClick={handleClick} className={`item-menu ${parseInt(clicked) === 6? "active":""}`} id={6} title={"Fornecedor"}>
-          <i className="material-icons">supervisor_account</i>Fornecedor
-        </li>
-        <li onClick={handleClick} className={`item-menu ${parseInt(clicked) === 7? "active":""}`} id={7} title={"Usuários"}>
-          <i className="material-icons">person_pin</i>Usuários
-        </li>
+        <NavLink to="/app/filmes">
+          <li><MovieIcon/>Filmes</li>
+        </NavLink>
+        <NavLink to="/app/sessoes">
+          <li><Icon>LocalMovies</Icon>Sessões</li>
+        </NavLink>
+        <NavLink to="/app/salas">
+          <li><Icon>MeetingRoom</Icon>Salas</li>
+        </NavLink>
       </ul>
     )
   }
 
   return (
     <MenuDiv>
-      <div className="menu-header">
-        <Avatar>
-          <Title title="M"></Title>
-        </Avatar>
-        <div className="info">
-          <p className="userName">Objetive Ti</p>
-          <p className="userEmail">developer@objetiveti.com.br</p>
-        </div>
-      </div>
-      <div className="title">
-        <span>Menu Principal</span>
-      </div>
+      <TitleMenu>Menu Principal</TitleMenu>
       <ItemMenu></ItemMenu>
      <div className={`menu-footer ${isActive ? "" : "active"}`}>
         <div
@@ -89,10 +56,10 @@ function Menu({setRefenceTitlePage}) {
           }}
         >
           <div className="mf-header-left">
-            <i className="material-icons">color_lens</i>
+            <i className="pi pi-pallete" style={{'fontSize': '1em'}}></i>
             <p>Configurações</p>
           </div>
-          <i className="material-icons dropdown">keyboard_arrow_down</i>
+          <i className="pi pi-chevron-down" style={{'fontSize': '1em'}}></i>
         </div>
         <div className="mf-body upper">
           <div className="row">
@@ -120,7 +87,7 @@ function Menu({setRefenceTitlePage}) {
                     setColorTheme(themeColor);
                   }}
                 >
-                  <i className="material-icons">save</i>
+                  <i className="pi pi-pallete" style={{'fontSize': '1em'}}></i>
                   <p>Salvar alterações</p>
                 </button>
               </div>
