@@ -4,7 +4,7 @@ export const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-    flex-direction: column;
+  flex-direction: column;
 `;
 
 export const FlexContent = styled.div`
@@ -20,8 +20,8 @@ export const Main = styled.div`
   padding: 1em;
   display: flex;
   flex-direction: column;
-  overflow-y:scroll;
-  position:relative;
+  overflow-y: scroll;
+  position: relative;
   background-color: var(--cor-bg-body);
 
   /* Esconde a tela principal */
@@ -140,7 +140,7 @@ export const Main = styled.div`
     100% {
       -webkit-transform: translateX(0);
       transform: translateX(0);
-      opacity: 1; 
+      opacity: 1;
     }
   }
 `;

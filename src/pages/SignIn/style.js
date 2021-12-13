@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import backgroundImg from '../../assets/img/background1.png';
+import backgroundImg from "../../assets/img/background-cinemac-login.png";
 
 export const SectionLogin = styled.section`
   min-height: 100vh;
@@ -8,7 +8,8 @@ export const SectionLogin = styled.section`
 export const MainLogin = styled.main`
   min-height: 100vh;
 
-  ::before,::after{
+  ::before,
+  ::after {
     content: "";
     width: 100%;
     height: 100%;
@@ -17,9 +18,9 @@ export const MainLogin = styled.main`
     left: 0;
   }
 
-  ::before{
+  ::before {
     background-color: #000000;
-    opacity: .3;
+    opacity: 0.3;
     z-index: 2;
   }
 
@@ -51,10 +52,10 @@ export const Login = styled.div`
   position: relative;
   padding: 1em;
   -webkit-box-shadow: 0px 10px 20px 0px rgba(50, 50, 50, 0.52);
-	-moz-box-shadow:    0px 10px 20px 0px rgba(50, 50, 50, 0.52);
-	box-shadow:         0px 10px 20px 0px rgba(50, 50, 50, 0.52);
+  -moz-box-shadow: 0px 10px 20px 0px rgba(50, 50, 50, 0.52);
+  box-shadow: 0px 10px 20px 0px rgba(50, 50, 50, 0.52);
 
-  #loading{
+  #loading {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -65,22 +66,25 @@ export const Login = styled.div`
     visibility: hidden;
   }
 
-  .loginHeader{
+  .loginHeader {
     display: flex;
     flex-direction: column;
     gap: 1em;
     justify-content: center;
     align-items: center;
     margin: 1em 0em;
-    
-    img{width:25%;}
+    margin-bottom: 3em;
+
+    img {
+      width: 25%;
+    }
   }
 
   .form-demo .card {
     min-width: 100%;
   }
 
-  .btn-login{
+  .btn-login {
     background-color: #5d9fd6 !important;
   }
 
@@ -90,14 +94,14 @@ export const Login = styled.div`
 
   @media screen and (max-width: 960px) {
     .form-demo .card {
-        width: 80%;
+      width: 80%;
     }
   }
 
   @media screen and (max-width: 640px) {
     .form-demo .card {
-        width: 100%;
-        min-width: 0;
+      width: 100%;
+      min-width: 0;
     }
   }
 `;
@@ -105,13 +109,14 @@ export const HeaderLogin = styled.div`
   color: #ffffff;
   z-index: 3;
   display: none;
+  margin-bottom: 3em;
 
-  h1{
-    margin-bottom: .5em;
+  h1 {
+    margin-bottom: 0.5em;
     width: fit-content;
     position: relative;
 
-    ::after{
+    ::after {
       content: "";
       position: absolute;
       width: 50%;
@@ -121,18 +126,18 @@ export const HeaderLogin = styled.div`
     }
   }
 
-  @media screen and (min-width: 1024px){
+  @media screen and (min-width: 1024px) {
     display: block;
   }
 `;
 export const FormLogin = styled.form`
   z-index: 3;
 
-  .input-fild{
+  .input-fild {
     margin-bottom: 1em;
   }
 
-  .input-fild label{
+  .input-fild label {
     text-transform: uppercase;
     font-weight: bold;
     font-size: 0.75em;
@@ -141,9 +146,9 @@ export const FormLogin = styled.form`
     padding: 0 0 0.5em 0;
   }
 
-  .button{
-    button{
-      background: linear-gradient(180deg, #25C8BC 0%, #0383C4 100%);
+  .button {
+    button {
+      background: linear-gradient(180deg, #25c8bc 0%, #0383c4 100%);
     }
   }
 `;

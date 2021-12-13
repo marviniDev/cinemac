@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Button } from './style'
+import { Button } from "./style";
 
 const DarkMode = () => {
-  const [checkedTheme, setCheckedTheme] = useState(localStorage.getItem("theme") === "dark" ? 'checked' : '');
+  const [checkedTheme, setCheckedTheme] = useState(
+    localStorage.getItem("theme") === "dark" ? "checked" : ""
+  );
   let clickedClass = "clicked";
   const body = document.body;
   const lightTheme = "light";
@@ -14,31 +16,36 @@ const DarkMode = () => {
   }
 
   if (theme === lightTheme || theme === darkTheme) {
-    body.classList.add(theme);
+    body.setAttribute("theme", theme);
   } else {
-    body.classList.add(lightTheme);
+    body.setAttribute("theme", lightTheme);
   }
 
   const switchTheme = (e) => {
     if (theme === darkTheme) {
-      body.classList.replace(darkTheme, lightTheme);
       e.target.classList.remove(clickedClass);
       localStorage.setItem("theme", "light");
       theme = lightTheme;
-      setCheckedTheme('');
+      setCheckedTheme("");
     } else {
-      body.classList.replace(lightTheme, darkTheme);
       e.target.classList.add(clickedClass);
       localStorage.setItem("theme", "dark");
       theme = darkTheme;
-      setCheckedTheme('checked');
+      setCheckedTheme("checked");
     }
   };
 
   return (
     <Button>
       <div className="button">
-        <input type="checkbox" className={`checkbox ${checkedTheme} darkmode ${theme === "dark" ? clickedClass : ""}`} onClick={(e) => switchTheme(e)} id="chk" />
+        <input
+          type="checkbox"
+          className={`checkbox ${checkedTheme} darkmode ${
+            theme === "dark" ? clickedClass : ""
+          }`}
+          onClick={(e) => switchTheme(e)}
+          id="chk"
+        />
         <label className="label" htmlFor="chk">
           <i className="fas fa-moon"></i>
           <i className="fas fa-sun"></i>

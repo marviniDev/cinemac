@@ -1,17 +1,42 @@
 import styled from "styled-components";
 
-export const MenuDiv = styled.div`
-  width: 20em;
+export const Container = styled.div`
+  transition: all 0.3s ease-in-out;
+  width: ${(props) => (props.isMenuActive ? "20em" : "6em")};
+
+  @media screen and (max-width: 1024px) {
+    width: 0em;
+  }
+`;
+
+export const MenuContainer = styled.div`
+  width: 100%;
   height: 100%;
-  position: relative;
-  background-color: var(--cor-bg-menu);
-  -webkit-box-shadow: 1px 4px 5px 1px #858585; 
-box-shadow: 1px 4px 5px 1px #858585;
+  transition: all 0.3s ease-in-out;
+
+  @media screen and (max-width: 1024px) {
+    top: 0;
+    z-index: 3;
+    position: fixed;
+    background-color: #00000057;
+    visibility: ${(props) => (props.isMenuActive ? "visible" : "hidden")};
+  }
+`;
+
+export const MenuDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-bg-body);
+  color: var(--color-fonts-default);
+  -webkit-box-shadow: 1px 4px 5px 1px #858585;
+  box-shadow: 1px 4px 5px 1px #858585;
   display: flex;
   flex-direction: column;
+  transition: all 0.3s ease-in-out;
+  position: relative;
 
   .menu-header {
-    color: var(--cor-fonts-primary);
+    color: var(--color-fonts-primary);
     display: flex;
     align-items: center;
     padding: 12px;
@@ -22,7 +47,7 @@ box-shadow: 1px 4px 5px 1px #858585;
       }
 
       p:first-child {
-        color: var(--cor-principal);
+        color: var(--color-principal);
       }
 
       p:last-child {
@@ -35,7 +60,7 @@ box-shadow: 1px 4px 5px 1px #858585;
   .title {
     padding: 1rem;
     font-size: 16px;
-    color: var(--cor-fonts-primary);
+    color: var(--color-fonts-primary);
     font-weight: 700;
   }
 
@@ -53,47 +78,67 @@ box-shadow: 1px 4px 5px 1px #858585;
     li {
       margin: 0em 1em;
       border-radius: 5px;
-      height: 44px;
       list-style: none;
       padding: 1rem;
       display: flex;
       align-items: center;
       cursor: pointer;
-      color: var(--cor-fonts-primary);
+      color: var(--color-fonts-default);
       font-weight: 700;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease-in-out;
+
+      svg {
+        fill: var(--color-fonts-default);
+      }
 
       i {
         margin-right: 16px;
       }
 
       :hover {
-        background-color: var(--cor-li-hover);
-        color: var(--cor-principal);
+        background-color: var(--color-li-hover);
+        color: var(--color-main);
         transition: 0.5s;
+
+        svg {
+          fill: var(--color-main);
+        }
       }
     }
 
-    a.active{
-      li{
-        color:var(--cor-fonts-secundary);
-        background-color:var(--cor-principal);
+    a.active {
+      li {
+        color: var(--color-main);
+        background: var(--color-li-active);
 
+        svg {
+          fill: var(--color-main);
+        }
+
+        :before {
+          content: "";
+          width: 4px;
+          height: 100%;
+          position: absolute;
+          left: 0;
+          background: var(--color-main);
+        }
       }
     }
   }
 
   .menu-footer {
-    p {
-      font-size: 1em;
-    }
     position: absolute;
     bottom: 0;
     width: 100%;
-    background-color: var(--cor-menu-footer);
-    color: var(--cor-fonts-primary);
+    border-radius: 0em;
+    background-color: var(--color-menu-footer);
+    color: var(--color-fonts-primary);
 
     .mf-header {
-      padding: 1em 0.5em;
+      padding: 1.4em 0.5em;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -113,7 +158,7 @@ box-shadow: 1px 4px 5px 1px #858585;
     }
 
     .mf-body {
-      border-top: 2px solid var(--cor-border-menu-footer);
+      border-top: 2px solid var(--color-border-menu-footer);
       padding: 1em;
       display: none;
       .row {
@@ -170,23 +215,23 @@ box-shadow: 1px 4px 5px 1px #858585;
               .icon-tcolor:nth-child(2) {
                 top: 1.1em;
                 left: 1.3em;
-                background-color: var(--cor-menu-footer);
+                background-color: var(--color-menu-footer);
               }
 
               .icon-tcolor:nth-child(3) {
                 top: 1.1em;
                 left: 0.3em;
-                background-color: var(--cor-bg-body);
+                background-color: var(--color-bg-body);
               }
             }
 
             button.salvar-cor {
-              display:flex;
-              flex-direction:row;
-              justify-content:center;
+              display: flex;
+              flex-direction: row;
+              justify-content: center;
               padding: 0.5em;
-              background-color: var(--cor-principal);
-              color: var(--cor-fonts-secundary);
+              background-color: var(--color-main);
+              color: var(--color-fonts-secundary);
             }
           }
         }
@@ -216,8 +261,28 @@ box-shadow: 1px 4px 5px 1px #858585;
       transform: rotate(180deg);
     }
   }
+
+  @media screen and (max-width: 1024px) {
+    z-index: 999;
+    transform: ${(props) =>
+      props.isMenuActive ? "translateX(0%)" : "translateX(-100%)"};
+    width: calc(100% - 30%);
+  }
 `;
 
 export const TitleMenu = styled.h4`
   margin: 2em 1em 1em 1em;
+`;
+
+export const SvgMenu = styled.div`
+  margin-right: 1em;
+`;
+
+export const LogoMobile = styled.div`
+  padding: 0.8em;
+  box-shadow: 1px 0px 5px 1px #858585;
+
+  @media screen and (min-width: 1024px) {
+    display: none;
+  }
 `;

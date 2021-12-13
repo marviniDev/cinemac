@@ -1,28 +1,57 @@
-import { Redirect } from "react-router-dom"
-import React, { useContext } from 'react';
-
-import { SectionLogin, MainLogin, ContainerLogin, HeaderLogin, Login } from './style';
-import Logo from '../../assets/img/icon-circle-blue.png';
-import AuthContext from '../../contexts/auth';
-
-import { useFormik } from 'formik';
-import { InputText } from 'primereact/inputtext';
-import { Button } from 'primereact/button';
-import { Password } from 'primereact/password';
-import { classNames } from 'primereact/utils';
-
+import { useFormik } from "formik";
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
+import { Password } from "primereact/password";
+import { Toast } from "primereact/toast";
+import { classNames } from "primereact/utils";
+import { useContext, useRef } from "react";
+import { Redirect } from "react-router-dom";
+import Logo from "../../assets/img/icon-cinemac-circle56px.png";
+import AuthContext from "../../contexts/auth";
+import Api from "../../services/Api";
+import {
+  ContainerLogin,
+  HeaderLogin,
+  Login,
+  MainLogin,
+  SectionLogin,
+} from "./style";
 
 const SignIn = () => {
   const { signed, setSigned } = useContext(AuthContext);
+  const toast = useRef(null);
 
-  async function handleSubmit(e) {
-    setSigned(true)
-    localStorage.setItem('@app::user', JSON.stringify('a'))
+  async function handleSubmit(data) {
+    try {
+      const res = await Api.post(Api.defaults.baseURL + "/autenticaUsuario", {
+        email: data.email,
+        senha: data.senha,
+      });
+
+      if (res.status === 200 && res.data.authenticate === "true") {
+        const dataUser = {
+          name: res.data?.nome,
+          email: res.data?.email,
+        };
+        localStorage.setItem("@app::user", JSON.stringify(dataUser));
+        setSigned(true);
+      } else {
+        toast.current.show({
+          severity: "error",
+          summary: "Falha na Autenticação",
+          detail: "Email ou Senha incorreta.",
+          life: 3000,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
     <SectionLogin>
-      {signed ? <Redirect to={'/app/filmes'}/> : null}
+      <Toast ref={toast} />
+      {signed ? <Redirect to={"/app/filmes"} /> : null}
       <MainLogin>
         <ContainerLogin>
           <HeaderLogin>
@@ -35,48 +64,54 @@ const SignIn = () => {
             </p>
           </HeaderLogin>
           <Login>
-            <FormikFormLogin onSubmit={handleSubmit} />
+            <FormikFormLogin onSubmit={(data) => handleSubmit(data)} />
           </Login>
         </ContainerLogin>
       </MainLogin>
     </SectionLogin>
-  )
-}
+  );
+};
 
-const FormikFormLogin = ({onSubmit}) => {
+const FormikFormLogin = ({ onSubmit }) => {
   // const [formData, setFormData] = useState({});
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: '',
-      accept: false
+      email: "",
+      senha: "",
+      accept: false,
     },
     validate: (data) => {
       let errors = {};
 
       if (!data.email) {
-        errors.email = 'Email is required.';
-      }
-      else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(data.email)) {
-        errors.email = 'Invalid email address. E.g. example@email.com';
+        errors.email = "Email is required.";
+      } else if (
+        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(data.email)
+      ) {
+        errors.email = "Invalid email address. E.g. example@email.com";
       }
 
-      if (!data.password) {
-        errors.password = 'Password is required.';
+      if (!data.senha) {
+        errors.senha = "Password is required.";
       }
 
       return errors;
     },
     onSubmit: (data) => {
-      onSubmit();
+      onSubmit(data);
       formik.resetForm();
-    }
+    },
   });
 
-  const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
+  const isFormFieldValid = (name) =>
+    !!(formik.touched[name] && formik.errors[name]);
   const getFormErrorMessage = (name) => {
-    return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
+    return (
+      isFormFieldValid(name) && (
+        <small className="p-error">{formik.errors[name]}</small>
+      )
+    );
   };
 
   return (
@@ -91,17 +126,46 @@ const FormikFormLogin = ({onSubmit}) => {
             <div className="p-field">
               <span className="p-float-label p-input-icon-right">
                 <i className="pi pi-envelope" />
-                <InputText id="email" name="email" value={formik.values.email} onChange={formik.handleChange} className={classNames({ 'p-invalid': isFormFieldValid('email') })} />
-                <label htmlFor="email" className={classNames({ 'p-error': isFormFieldValid('email') })}>Email*</label>
+                <InputText
+                  id="email"
+                  name="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  className={classNames({
+                    "p-invalid": isFormFieldValid("email"),
+                  })}
+                />
+                <label
+                  htmlFor="email"
+                  className={classNames({
+                    "p-error": isFormFieldValid("email"),
+                  })}
+                >
+                  Email*
+                </label>
               </span>
-              {getFormErrorMessage('email')}
+              {getFormErrorMessage("email")}
             </div>
             <div className="p-field">
               <span className="p-float-label">
-                <Password id="password" name="password" value={formik.values.password} onChange={formik.handleChange} toggleMask />
-                <label htmlFor="password" className={classNames({ 'p-error': isFormFieldValid('password') })}>Password*</label>
+                <Password
+                  id="senha"
+                  name="senha"
+                  value={formik.values.senha}
+                  onChange={formik.handleChange}
+                  feedback={false}
+                  toggleMask
+                />
+                <label
+                  htmlFor="senha"
+                  className={classNames({
+                    "p-error": isFormFieldValid("senha"),
+                  })}
+                >
+                  Senha*
+                </label>
               </span>
-              {getFormErrorMessage('password')}
+              {getFormErrorMessage("senha")}
             </div>
 
             <Button type="submit" label="Submit" className="btn-login" />
@@ -110,6 +174,6 @@ const FormikFormLogin = ({onSubmit}) => {
       </div>
     </div>
   );
-}
+};
 
 export default SignIn;

@@ -37,7 +37,4 @@ export const Container = styled.div`
     .p-dropdown-label:not(.p-placeholder) {
     text-transform: uppercase;
   }
-  .p-button-icon.p-c.pi.pi-upload {
-    display: none;
-  }
 `;

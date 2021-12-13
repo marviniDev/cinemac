@@ -1,41 +1,47 @@
-import React from "react";
-import { TopBar, Flex, Icon } from "./style";
 import { Avatar } from "primereact/avatar";
-import { Menubar } from 'primereact/menubar';
-import Logo from "../../assets/img/icon-square-blue.jpg"
-import { useContext } from "react";
-import AuthProvider from "../../contexts/auth"
+import { useContext, useState } from "react";
+import { Redirect } from "react-router";
+import AuthProvider from "../../contexts/auth";
+import DarkMode from "../Darkmode";
+import LogoApp from "../Logo";
+import { ContainerAvatar, Details, TopBar } from "./style";
 
-function MenuTop(props) {
+function MenuTop({ isMenuActive, setMenuActive }) {
+  const { user, ExitToApp } = useContext(AuthProvider);
+  const [exit, setExit] = useState(false);
+  const [isClicked, setClicked] = useState(false);
 
-  const { user, ExitToApp } = useContext(AuthProvider)
-
-  console.log(user, "oi");
-
-  const items = [
-    {
-      label: <Avatar label={user?.name?.substring(0, 1)} style={{ background: '#0383C4', color: '#fff' }} className="p-mr-2" size="large" shape="circle" />,
-      items: [
-        {
-          label: 'Sair',
-          icon: 'pi pi-fw pi-power-off',
-          url: ExitToApp()
-        }
-      ]
-    },
-
-  ];
-
-  // const start = <Avatar label={user?.name.substring(0,3)} className="p-mr-2" size="small" shape="circle" />;
+  function exitAplication() {
+    setExit(ExitToApp());
+  }
 
   return (
     <TopBar>
-      <Flex>
-        <Icon className="pi pi-bars p-mr-2"></Icon>
-        <Avatar className="p-overlay-badge" image={Logo} size="large" />
-        <h1>Cinemac</h1>
-      </Flex>
-      <Menubar model={items} start={""} end={""} />
+      <LogoApp {...{ isMenuActive }} {...{ setMenuActive }} />
+      <ContainerAvatar
+        onClick={() => {
+          setClicked(!isClicked);
+        }}
+      >
+        <DarkMode></DarkMode>
+        <Avatar
+          label={user?.name?.substring(0, 1)}
+          style={{ background: "#0383C4", color: "#fff", borderRadius: "50%" }}
+          className="p-mr-2"
+          size="large"
+          shape="circle"
+        />
+        <i className="pi pi-angle-down p-mr-2"></i>
+
+        <Details className="datails" isClicked={isClicked}>
+          <ul>
+            <li onClick={exitAplication}>
+              <i className="pi pi-power-off p-mr-2"></i> Sair
+            </li>
+          </ul>
+        </Details>
+      </ContainerAvatar>
+      {exit ? <Redirect to="/login" /> : null}
     </TopBar>
   );
 }

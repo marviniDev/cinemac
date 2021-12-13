@@ -15,7 +15,7 @@ import { Container } from "./style";
 function Movie() {
   return (
     <Container>
-      <TableComponent {...{ url: "listaFilmes" }} />
+      <TableComponent {...{ url: "salas" }} />
     </Container>
   );
 }
@@ -25,10 +25,8 @@ export default Movie;
 const TableComponent = ({ url }) => {
   let emptyProduct = {
     id: null,
-    titulo: "",
-    imagem: null,
-    descricao: "",
-    duracao: 0,
+    nome: "",
+    quant_assentos: 0,
   };
 
   const [products, setProducts] = useState(null);
@@ -40,7 +38,6 @@ const TableComponent = ({ url }) => {
   const [globalFilter, setGlobalFilter] = useState(null);
   const toast = useRef(null);
   const dt = useRef(null);
-  const [image, setImage] = useState(null);
 
   useEffect(() => {
     Api.get(Api.defaults.baseURL + url).then((response) => {
@@ -66,17 +63,11 @@ const TableComponent = ({ url }) => {
   const saveProduct = async () => {
     setSubmitted(true);
 
-    if (
-      product.titulo.trim() &&
-      product.descricao.trim() &&
-      product.duracao > 0 &&
-      product.imagem != null
-    ) {
+    if (product.nome.trim()) {
       let _products = [...products];
-      console.log(_products);
       let _product = { ...product };
       if (product.id) {
-        let res = await Api.post(Api.defaults.baseURL + "atualizarFilme", {
+        let res = await Api.post(Api.defaults.baseURL + "salvarSala", {
           ..._product,
         });
 
@@ -98,11 +89,9 @@ const TableComponent = ({ url }) => {
 
         setSubmitted(false);
       } else {
-        let res = await Api.post(Api.defaults.baseURL + "salvarFilme", {
-          titulo: _product.titulo,
-          imagem: _product.imagem,
-          descricao: _product.descricao,
-          duracao: _product.duracao,
+        let res = await Api.post(Api.defaults.baseURL + "salvarSala ", {
+          nome: _product.nome,
+          quant_assentos: _product.quant_assentos,
         });
 
         if (res.data && res.data.save === "true") {
@@ -129,19 +118,21 @@ const TableComponent = ({ url }) => {
     }
   };
 
-  const editProduct = (product) => {
-    setProduct({ ...product });
-    setProductDialog(true);
-  };
+  // const editProduct = (product) => {
+  //   setProduct({ ...product });
+  //   setProductDialog(true);
+  // };
 
-  const confirmDeleteProduct = (product) => {
-    setProduct(product);
-    setDeleteProductDialog(true);
-  };
+  // const confirmDeleteProduct = (product) => {
+  //   setProduct(product);
+  //   setDeleteProductDialog(true);
+  // };
 
   const deleteProduct = async () => {
     await Api.delete(Api.defaults.baseURL + `deletarFilme/${product.id}`);
 
+    // let _products = products.filter((val) => val.id !== product.id);
+    // setProducts(_products);
     setSubmitted(!submitted);
     setDeleteProductDialog(false);
     setProduct(emptyProduct);
@@ -153,40 +144,10 @@ const TableComponent = ({ url }) => {
     });
   };
 
-  const converter = (minutos) => {
-    const horas = Math.floor(minutos / 60);
-    const min = minutos % 60;
-    const textoHoras = `00${horas}`.slice(-2);
-    const textoMinutos = `00${min}`.slice(-2);
-
-    return `${textoHoras}:${textoMinutos}`;
-  };
-
   const onInputChange = (e, name) => {
     const val = (e.target && e.target.value) || "";
-    const _product = { ...product };
-
-    if (e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        _product[`${name}`] = e.target.result;
-        setImage(e.target.result);
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    } else {
-      if (name === "duracao") {
-        const valueHora = e.target.value;
-        const a = valueHora.split(":");
-        const minutos = +a[0] * 60 + +a[1];
-        _product[`${name}`] = minutos;
-      } else {
-        _product[`${name}`] = val;
-      }
-    }
-
-    console.log(e.target.value, name);
-    console.log(_product);
-
+    let _product = { ...product };
+    _product[`${name}`] = val;
     setProduct(_product);
   };
 
@@ -203,37 +164,22 @@ const TableComponent = ({ url }) => {
     );
   };
 
-  const imageBodyTemplate = (rowData) => {
-    return (
-      <img
-        style={{ width: "100px" }}
-        src={`${rowData.imagem}`}
-        onError={(e) =>
-          (e.target.src =
-            "https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png")
-        }
-        alt={rowData.imagem}
-        className="product-image"
-      />
-    );
-  };
-
-  const actionBodyTemplate = (rowData) => {
-    return (
-      <>
-        <Button
-          icon="pi pi-pencil"
-          className="p-button-rounded p-button-success p-mr-2"
-          onClick={() => editProduct(rowData)}
-        />
-        <Button
-          icon="pi pi-trash"
-          className="p-button-rounded p-button-warning"
-          onClick={() => confirmDeleteProduct(rowData)}
-        />
-      </>
-    );
-  };
+  // const actionBodyTemplate = (rowData) => {
+  //   return (
+  //     <>
+  //       <Button
+  //         icon="pi pi-pencil"
+  //         className="p-button-rounded p-button-success p-mr-2"
+  //         onClick={() => editProduct(rowData)}
+  //       />
+  //       <Button
+  //         icon="pi pi-trash"
+  //         className="p-button-rounded p-button-warning"
+  //         onClick={() => confirmDeleteProduct(rowData)}
+  //       />
+  //     </>
+  //   );
+  // };
 
   const header = (
     <div className="table-header">
@@ -241,7 +187,6 @@ const TableComponent = ({ url }) => {
         <i className="pi pi-search" />
         <InputText
           type="search"
-          autoComplete="off"
           onInput={(e) => setGlobalFilter(e.target.value)}
           placeholder="Search..."
         />
@@ -312,15 +257,8 @@ const TableComponent = ({ url }) => {
             headerStyle={{ width: "3rem" }}
             exportable={false}
           ></Column> */}
-          <Column
-            field="image"
-            header="Image"
-            body={imageBodyTemplate}
-          ></Column>
-          <Column field="titulo" header="Titulo" sortable></Column>
-          <Column field="descricao" header="Descrição" sortable></Column>
-          <Column field="duracao" header="Duração" sortable></Column>
-          <Column body={actionBodyTemplate} exportable={false}></Column>
+          <Column field="nome" header="Nome" sortable></Column>
+          <Column field="quant_assentos" header="Assentos" sortable></Column>
         </DataTable>
       </div>
 
@@ -334,89 +272,38 @@ const TableComponent = ({ url }) => {
         onHide={hideDialog}
       >
         <form encType="multipart/form-data">
-          <div className="previewImagem">
-            {image && (
-              <img
-                style={{ maxWidth: "100%" }}
-                src={`${product.imagem}`}
-                onError={(e) =>
-                  (e.target.src =
-                    "https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png")
-                }
-                alt={product.imagem}
-                className="product-image p-d-block p-m-auto p-pb-3"
-              />
-            )}
-          </div>
-
           <div className="p-field">
-            <label htmlFor="imagem">Imagem</label>
-            <input
-              id="imagem"
-              type="file"
-              accept="image/*"
-              src={product.imagem}
-              onChange={(e) => onInputChange(e, "imagem")}
-              required
-              autoFocus
-              className={classNames({
-                "p-invalid": submitted && !product.imagem,
-              })}
-            />
-            {submitted && !product.imagem && (
-              <small className="p-error">Imagem é obrigatorio.</small>
-            )}
-          </div>
-
-          <div className="p-field">
-            <label htmlFor="titulo">Titulo</label>
+            <label htmlFor="nome">Nome</label>
             <InputText
-              id="titulo"
-              autoComplete="off"
-              value={product.titulo}
-              onChange={(e) => onInputChange(e, "titulo")}
+              id="nome"
+              value={product.nome}
+              onChange={(e) => onInputChange(e, "nome")}
               required
               autoFocus
               className={classNames({
-                "p-invalid": submitted && !product.titulo,
+                "p-invalid": submitted && !product.nome,
               })}
             />
-            {submitted && !product.titulo && (
-              <small className="p-error">Titulo é obrigatorio.</small>
+            {submitted && !product.nome && (
+              <small className="p-error">Nome é obrigatoria.</small>
             )}
           </div>
           <div className="p-field">
-            <label htmlFor="descricao">Descricao</label>
+            <label htmlFor="quant_assentos">Assentos</label>
             <InputText
-              id="descricao"
-              autoComplete="off"
-              value={product.descricao}
-              onChange={(e) => onInputChange(e, "descricao")}
+              id="quant_assentos"
+              value={product.quant_assentos}
+              onChange={(e) => onInputChange(e, "quant_assentos")}
               required
               autoFocus
               className={classNames({
-                "p-invalid": submitted && !product.descricao,
+                "p-invalid": submitted && !product.quant_assentos,
               })}
             />
-            {submitted && !product.descricao && (
-              <small className="p-error">Descricao é obrigatoria.</small>
-            )}
-          </div>
-          <div className="p-field">
-            <label htmlFor="duracao">Duracao</label>
-            <InputText
-              id="duracao"
-              type="time"
-              value={converter(product.duracao)}
-              onChange={(e) => onInputChange(e, "duracao")}
-              required
-              autoFocus
-              className={classNames({
-                "p-invalid": submitted && !product.duracao,
-              })}
-            />
-            {submitted && !product.duracao && !product.duracao <= 0 && (
-              <small className="p-error">Duração é obrigatoria.</small>
+            {submitted && !product.quant_assentos && (
+              <small className="p-error">
+                Quantidade de assentos é obrigatoria.
+              </small>
             )}
           </div>
         </form>
