@@ -23,7 +23,7 @@ const SignIn = () => {
 
   async function handleSubmit(data) {
     try {
-      const res = await Api.post(Api.defaults.baseURL + "/autenticaUsuario", {
+      const res = await Api.post(Api.defaults.baseURL + "autenticaUsuario", {
         email: data.email,
         senha: data.senha,
       });
