@@ -25,7 +25,7 @@ function Movie() {
 export default Movie;
 
 const TableComponent = ({ url }) => {
-  let emptyProduct = {
+  let emptySession = {
     id: null,
     data: "",
     tipoAudio: null,
@@ -47,92 +47,100 @@ const TableComponent = ({ url }) => {
   //   placeholder: "0,00",
   // });
 
-  const [products, setSessoes] = useState(null);
-  const [filmes, setFilmes] = useState([]);
-  const [salas, setSalas] = useState(null);
-  const [productDialog, setProductDialog] = useState(false);
-  const [deleteProductDialog, setDeleteProductDialog] = useState(false);
-  const [product, setProduct] = useState(emptyProduct);
-  const [selectedProducts, setSelectedProducts] = useState(null);
+  const [sessions, setSessions] = useState(null);
+  const [movies, setMovies] = useState([]);
+  const [rooms, setRooms] = useState(null);
+  const [modalRegister, setModalRegister] = useState(false);
+  const [modalDelete, setModalDelete] = useState(false);
+  const [session, setSession] = useState(emptySession);
+  const [selectedSessions, setSelectedSessions] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [globalFilter, setGlobalFilter] = useState(null);
   const toast = useRef(null);
   const dt = useRef(null);
 
+  const optionsTipoAudio = [
+    { name: "Dublado", code: "dub" },
+    { name: "Original", code: "org" },
+  ];
+  const optionsAnimacao = [
+    { name: "2D", code: "2D" },
+    { name: "3D", code: "3D" },
+  ];
+
   useEffect(() => {
     Api.get(Api.defaults.baseURL + url).then((response) => {
-      response?.data && setSessoes(response.data);
+      response?.data && setSessions(response.data);
     });
   }, [submitted, url]);
 
   useEffect(() => {
-    const listarFilmes = async () => {
-      let resFilmes = await Api.get(Api.defaults.baseURL + "listaFilmes");
-      setFilmes(resFilmes.data);
+    const listMovies = async () => {
+      let resMovies = await Api.get(Api.defaults.baseURL + "listaFilmes");
+      setMovies(resMovies.data);
     };
-    const listarSalas = async () => {
-      let resSalas = await Api.get(Api.defaults.baseURL + "salas");
-      setSalas(resSalas.data);
+    const listRooms = async () => {
+      let resrooms = await Api.get(Api.defaults.baseURL + "salas");
+      setRooms(resrooms.data);
     };
-    listarFilmes();
-    listarSalas();
+    listMovies();
+    listRooms();
   }, []);
 
-  const openNew = () => {
-    setProduct(emptyProduct);
+  const newSession = () => {
+    setSession(emptySession);
     setSubmitted(false);
-    setProductDialog(true);
+    setModalRegister(true);
   };
 
-  const hideDialog = () => {
+  const hideModalRegister = () => {
     setSubmitted(false);
-    setProductDialog(false);
+    setModalRegister(false);
   };
 
-  const hideDeleteProductDialog = () => {
-    setDeleteProductDialog(false);
+  const hideModalDelete = () => {
+    setModalDelete(false);
   };
 
-  const saveProduct = async () => {
+  const saveSession = async () => {
     setSubmitted(true);
-    console.log(product);
 
     if (
-      product.data.trim() &&
-      product.tipoAudio != null &&
-      product.horaInicio.trim() &&
-      product.horaFim.trim() &&
-      product.filmeId != null &&
-      product.salaId != null &&
-      product.animacao != null &&
-      product.valorIngresso !== 0
+      session.data.trim() &&
+      session.tipoAudio != null &&
+      session.horaInicio.trim() &&
+      session.horaFim.trim() &&
+      session.filmeId != null &&
+      session.salaId != null &&
+      session.animacao != null &&
+      session.valorIngresso !== 0
     ) {
-      let _product = { ...product };
-      if (product.id) {
+      let _session = { ...session };
+      if (session.id) {
         let res = await Api.post(Api.defaults.baseURL + "salvaSessao", {
-          animacao: _product.animacao?.code ?? _product.animacao,
-          data: _product.data,
-          filmeId: _product.filmeId?.code ?? _product.filmeId,
-          horaFim: _product.horaFim,
-          horaInicio: _product.horaInicio,
-          id: _product.id,
-          salaId: _product.salaId?.code ?? _product.salaId,
-          tipoAudio: _product.tipoAudio?.code ?? _product.tipoAudio,
-          valorIngresso: _product.valorIngresso,
+          animacao: _session.animacao?.code ?? _session.animacao,
+          data: _session.data,
+          filmeId: _session.filmeId?.code ?? _session.filmeId,
+          horaFim: _session.horaFim,
+          horaInicio: _session.horaInicio,
+          id: _session.id,
+          salaId: _session.salaId?.code ?? _session.salaId,
+          tipoAudio: _session.tipoAudio?.code ?? _session.tipoAudio,
+          valorIngresso: _session.valorIngresso,
         });
 
         if (res.data && res.data.save === "true") {
           toast.current.show({
             severity: "success",
             summary: "Tudo certo!",
-            detail: res.data.message,
+            detail: res.data.message ?? "Editado com sucesso!",
             life: 3000,
           });
         } else {
           toast.current.show({
             severity: "error",
             summary: "Algo deu errado!",
-            detail: res.data.message,
+            detail: res.data.message ?? "Falha ao editar!",
             life: 3000,
           });
         }
@@ -140,62 +148,73 @@ const TableComponent = ({ url }) => {
         setSubmitted(false);
       } else {
         let res = await Api.post(Api.defaults.baseURL + "salvaSessao", {
-          animacao: _product.animacao?.code ?? _product.animacao,
-          data: _product.data,
-          filmeId: _product.filmeId?.code ?? _product.filmeId,
-          horaFim: _product.horaFim,
-          horaInicio: _product.horaInicio,
-          id: _product.id,
-          salaId: _product.salaId?.code ?? _product.salaId,
-          tipoAudio: _product.tipoAudio?.code ?? _product.tipoAudio,
-          valorIngresso: _product.valorIngresso,
+          animacao: _session.animacao?.code ?? _session.animacao,
+          data: _session.data,
+          filmeId: _session.filmeId?.code ?? _session.filmeId,
+          horaFim: _session.horaFim,
+          horaInicio: _session.horaInicio,
+          id: _session.id,
+          salaId: _session.salaId?.code ?? _session.salaId,
+          tipoAudio: _session.tipoAudio?.code ?? _session.tipoAudio,
+          valorIngresso: _session.valorIngresso,
         });
 
         if (res.data && res.data.save === "true") {
           toast.current.show({
             severity: "success",
             summary: "Tudo certo!",
-            detail: res.data.message,
+            detail: res.data.message ?? "Cadastrado com sucesso!",
             life: 3000,
           });
         } else {
           toast.current.show({
             severity: "error",
             summary: "Algo deu errado!",
-            detail: res.data.message,
+            detail: res.data.message ?? "Falha ao cadastrar!",
             life: 3000,
           });
         }
       }
 
       setSubmitted(false);
-      setProductDialog(false);
-      setProduct(emptyProduct);
+      setModalRegister(false);
+      setSession(emptySession);
     }
   };
 
-  const editProduct = (product) => {
-    console.log(product);
-    setProduct({ ...product });
-    setProductDialog(true);
+  const editSession = (session) => {
+    setSession({ ...session });
+    setModalRegister(true);
   };
 
-  const confirmDeleteProduct = (product) => {
-    setProduct(product);
-    setDeleteProductDialog(true);
+  const confirmDeleteSession = (session) => {
+    setSession(session);
+    setModalDelete(true);
   };
 
-  const deleteProduct = async () => {
-    await Api.delete(Api.defaults.baseURL + `deletarFilme/${product.id}`);
+  const deleteSession = async () => {
+    let res = await Api.delete(
+      Api.defaults.baseURL + `deletaSessao/${session.id}`
+    );
+
+    if (res.data && res.data.deleted === "true") {
+      toast.current.show({
+        severity: "success",
+        summary: "Tudo certo!",
+        detail: res.data.message ?? "Excluido com sucesso!",
+        life: 3000,
+      });
+    } else {
+      toast.current.show({
+        severity: "error",
+        summary: "Algo deu errado!",
+        detail: res.data.message ?? "Falha ao excluir!",
+        life: 3000,
+      });
+    }
     setSubmitted(!submitted);
-    setDeleteProductDialog(false);
-    setProduct(emptyProduct);
-    toast.current.show({
-      severity: "success",
-      summary: "Tudo certo!",
-      detail: "Filme deletado com sucesso.",
-      life: 3000,
-    });
+    setModalDelete(false);
+    setSession(emptySession);
   };
 
   const converteToHours = (minuts) => {
@@ -217,46 +236,46 @@ const TableComponent = ({ url }) => {
 
   const onInputChange = (e, name) => {
     const val = (e.target && e.target.value) || "";
-    let _product = { ...product };
+    let _session = { ...session };
 
-    _product[`${name}`] = val;
+    _session[`${name}`] = val;
 
-    setProduct(_product);
+    setSession(_session);
   };
 
   const onChangeFilm = (e) => {
     const { code } = e.target.value;
-    const result = filmes.find((Element) => Element.id === code);
+    const result = movies.find((Element) => Element.id === code);
 
     if (result) {
-      let _product = { ...product };
+      let _session = { ...session };
       const duracaoFilme = result.duracao;
 
-      _product.horaInicio ?? setSubmitted(true);
+      _session.horaInicio ?? setSubmitted(true);
 
-      _product["horaFim"] = converteToHours(
-        converteToMinuts(_product.horaInicio) + duracaoFilme
+      _session["horaFim"] = converteToHours(
+        converteToMinuts(_session.horaInicio) + duracaoFilme
       );
-      _product["filmeId"] = e.target.value;
+      _session["filmeId"] = e.target.value;
 
-      setProduct(_product);
+      setSession(_session);
     }
   };
 
   const onChangeHoraInicio = (e) => {
-    if (product.filmeId && product.filmeId != null) {
-      const code = product.filmeId?.code ?? product.filmeId;
+    if (session.filmeId && session.filmeId != null) {
+      const code = session.filmeId?.code ?? session.filmeId;
 
-      const result = filmes.find((Element) => Element.id === code);
+      const result = movies.find((Element) => Element.id === code);
       const duracaoFilme = result.duracao;
-      let _product = { ...product };
+      let _session = { ...session };
 
       const minutos = converteToMinuts(e.target.value);
 
-      _product["horaFim"] = converteToHours(minutos + duracaoFilme);
-      _product["horaInicio"] = converteToHours(minutos);
+      _session["horaFim"] = converteToHours(minutos + duracaoFilme);
+      _session["horaInicio"] = converteToHours(minutos);
 
-      setProduct(_product);
+      setSession(_session);
     }
   };
 
@@ -267,7 +286,7 @@ const TableComponent = ({ url }) => {
           label="New"
           icon="pi pi-plus"
           className="p-button-success p-mr-2"
-          onClick={openNew}
+          onClick={newSession}
         />
       </>
     );
@@ -279,12 +298,12 @@ const TableComponent = ({ url }) => {
         <Button
           icon="pi pi-pencil"
           className="p-button-rounded p-button-success p-mr-2"
-          onClick={() => editProduct(rowData)}
+          onClick={() => editSession(rowData)}
         />
         <Button
           icon="pi pi-trash"
           className="p-button-rounded p-button-warning"
-          onClick={() => confirmDeleteProduct(rowData)}
+          onClick={() => confirmDeleteSession(rowData)}
         />
       </>
     );
@@ -312,6 +331,38 @@ const TableComponent = ({ url }) => {
     return newData;
   };
 
+  function checkObject(obj) {
+    return typeof obj === "object" && obj !== null;
+  }
+
+  const findByOptionsTipoAudio = (code) => {
+    return optionsTipoAudio.find((Element) => Element.code === code);
+  };
+
+  const findByOptionsAnimacao = (code) => {
+    return optionsAnimacao.find((Element) => Element.code === code);
+  };
+
+  const findByOptionsMovies = (id) => {
+    let filterMovie = movies?.find((Element) => Element.id === id);
+    let newData = {};
+
+    newData.name = filterMovie && filterMovie.titulo;
+    newData.code = filterMovie && filterMovie.id;
+
+    return newData;
+  };
+
+  const findByOptionsRooms = (id) => {
+    let filterRoom = rooms?.find((Element) => Element.id === id);
+    let newData = {};
+
+    newData.name = filterRoom && filterRoom.nome;
+    newData.code = filterRoom && filterRoom.id;
+
+    return newData;
+  };
+
   const header = (
     <div className="table-header">
       <span className="p-input-icon-left">
@@ -325,35 +376,35 @@ const TableComponent = ({ url }) => {
       </span>
     </div>
   );
-  const productDialogFooter = (
+  const modalRegisterFooter = (
     <>
       <Button
         label="Cancel"
         icon="pi pi-times"
         className="p-button-text"
-        onClick={hideDialog}
+        onClick={hideModalRegister}
       />
       <Button
         label="Save"
         icon="pi pi-check"
         className="p-button-text"
-        onClick={saveProduct}
+        onClick={saveSession}
       />
     </>
   );
-  const deleteProductDialogFooter = (
+  const modalDeleteFooter = (
     <>
       <Button
         label="No"
         icon="pi pi-times"
         className="p-button-text"
-        onClick={hideDeleteProductDialog}
+        onClick={hideModalDelete}
       />
       <Button
         label="Yes"
         icon="pi pi-check"
         className="p-button-text"
-        onClick={deleteProduct}
+        onClick={deleteSession}
       />
     </>
   );
@@ -371,15 +422,15 @@ const TableComponent = ({ url }) => {
 
         <DataTable
           ref={dt}
-          value={products}
-          selection={selectedProducts}
-          onSelectionChange={(e) => setSelectedProducts(e.value)}
+          value={sessions}
+          selection={selectedSessions}
+          onSelectionChange={(e) => setSelectedSessions(e.value)}
           dataKey="id"
           paginator
           rows={10}
           rowsPerPageOptions={[5, 10, 25]}
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} sessions"
           globalFilter={globalFilter}
           // header={header}
           responsiveLayout="scroll"
@@ -394,19 +445,19 @@ const TableComponent = ({ url }) => {
           <Column field="horaFim" header="Hora final" sortable></Column>
           <Column field="tipoAudio" header="Áudio" sortable></Column>
           <Column field="animacao" header="Animação" sortable></Column>
-          <Column field="valorIngresso" header="Ingresso" sortable></Column>
+          <Column field="valorIngresso" header="Ingresso(R$)" sortable></Column>
           <Column body={actionBodyTemplate} exportable={false}></Column>
         </DataTable>
       </div>
 
       <Dialog
-        visible={productDialog}
+        visible={modalRegister}
         style={{ minWidth: "fit-content", minHeight: "fit-content" }}
-        header="Editar Filme"
+        header="Detalhes Sessão"
         modal
         className="p-fluid"
-        footer={productDialogFooter}
-        onHide={hideDialog}
+        footer={modalRegisterFooter}
+        onHide={hideModalRegister}
       >
         <form encType="multipart/form-data">
           <div className="p-field">
@@ -414,15 +465,15 @@ const TableComponent = ({ url }) => {
             <InputText
               id="data"
               type="date"
-              value={product.data}
+              value={session.data}
               onChange={(e) => onInputChange(e, "data")}
               required
               autoFocus
               className={classNames({
-                "p-invalid": submitted && !product.data,
+                "p-invalid": submitted && !session.data,
               })}
             />
-            {submitted && !product.data && (
+            {submitted && !session.data && (
               <small className="p-error">Data é obrigatorio.</small>
             )}
           </div>
@@ -434,16 +485,17 @@ const TableComponent = ({ url }) => {
               name="tipoAudio"
               required
               autoFocus
-              value={product.tipoAudio}
-              options={[
-                { name: "Dublado", code: "dub" },
-                { name: "Original", code: "org" },
-              ]}
+              value={
+                checkObject(session.tipoAudio)
+                  ? session.tipoAudio
+                  : findByOptionsTipoAudio(session.tipoAudio)
+              }
+              options={optionsTipoAudio}
               onChange={(e) => onInputChange(e, "tipoAudio")}
               optionLabel="name"
               placeholder="Selecione um Áudio"
             />
-            {submitted && !product.tipoAudio && (
+            {submitted && !session.tipoAudio && (
               <small className="p-error">Audio é obrigatorio.</small>
             )}
           </div>
@@ -452,7 +504,7 @@ const TableComponent = ({ url }) => {
             <InputText
               id="horaInicio"
               type="time"
-              value={product.horaInicio}
+              value={session.horaInicio}
               onChange={(e) => {
                 onInputChange(e, "horaInicio");
                 onChangeHoraInicio(e);
@@ -460,10 +512,10 @@ const TableComponent = ({ url }) => {
               required
               autoFocus
               className={classNames({
-                "p-invalid": submitted && !product.horaInicio,
+                "p-invalid": submitted && !session.horaInicio,
               })}
             />
-            {submitted && !product.horaInicio && (
+            {submitted && !session.horaInicio && (
               <small className="p-error">hora de inicio é obrigatorio.</small>
             )}
           </div>
@@ -473,15 +525,15 @@ const TableComponent = ({ url }) => {
               id="horaFim"
               type="time"
               disabled
-              value={product.horaFim}
+              value={session.horaFim}
               onChange={(e) => onInputChange(e, "horaFim")}
               required
               autoFocus
               className={classNames({
-                "p-invalid": submitted && !product.horaFim,
+                "p-invalid": submitted && !session.horaFim,
               })}
             />
-            {submitted && !product.horaFim && (
+            {submitted && !session.horaFim && (
               <small className="p-error">hora de termino é obrigatorio.</small>
             )}
           </div>
@@ -489,12 +541,16 @@ const TableComponent = ({ url }) => {
             <label htmlFor="filmeId">Filme</label>
             <Dropdown
               id="filmeId"
-              value={product.filmeId}
+              value={
+                checkObject(session.filmeId)
+                  ? session.filmeId
+                  : findByOptionsMovies(session.filmeId)
+              }
               required
               autoFocus
-              options={generateOptionsFilms(filmes)}
+              options={generateOptionsFilms(movies)}
               className={classNames({
-                "p-invalid": submitted && !product.filmeId,
+                "p-invalid": submitted && !session.filmeId,
               })}
               onChange={(e) => {
                 onInputChange(e, "filmeId");
@@ -503,7 +559,7 @@ const TableComponent = ({ url }) => {
               optionLabel="name"
               placeholder="Selecione um Filme"
             />
-            {submitted && !product.filmeId && (
+            {submitted && !session.filmeId && (
               <small className="p-error">Filme é obrigatorio.</small>
             )}
           </div>
@@ -512,18 +568,22 @@ const TableComponent = ({ url }) => {
             <label htmlFor="salaId">Sala</label>
             <Dropdown
               id="salaId"
-              value={product.salaId}
+              value={
+                checkObject(session.salaId)
+                  ? session.salaId
+                  : findByOptionsRooms(session.salaId)
+              }
               onChange={(e) => onInputChange(e, "salaId")}
               required
               autoFocus
-              options={generateOptionsRooms(salas)}
+              options={generateOptionsRooms(rooms)}
               className={classNames({
-                "p-invalid": submitted && !product.salaId,
+                "p-invalid": submitted && !session.salaId,
               })}
               optionLabel="name"
               placeholder="Selecione uma Sala"
             />
-            {submitted && !product.salaId && (
+            {submitted && !session.salaId && (
               <small className="p-error">Sala é obrigatoria.</small>
             )}
           </div>
@@ -531,21 +591,22 @@ const TableComponent = ({ url }) => {
             <label htmlFor="animacao">Animação</label>
             <Dropdown
               id="animacao"
-              value={product.animacao}
+              value={
+                checkObject(session.animacao)
+                  ? session.animacao
+                  : findByOptionsAnimacao(session.animacao)
+              }
               required
               autoFocus
-              options={[
-                { name: "2D", code: "2D" },
-                { name: "3D", code: "3D" },
-              ]}
+              options={optionsAnimacao}
               className={classNames({
-                "p-invalid": submitted && !product.animacao,
+                "p-invalid": submitted && !session.animacao,
               })}
               onChange={(e) => onInputChange(e, "animacao")}
               optionLabel="name"
               placeholder="Selecione uma Animação"
             />
-            {submitted && !product.animacao && (
+            {submitted && !session.animacao && (
               <small className="p-error">Animação é obrigatoria.</small>
             )}
           </div>
@@ -556,15 +617,15 @@ const TableComponent = ({ url }) => {
               type="number"
               autoComplete="off"
               step={0.01}
-              value={product.valorIngresso}
+              value={session.valorIngresso}
               onChange={(e) => onInputChange(e, "valorIngresso")}
               required
               autoFocus
               className={classNames({
-                "p-invalid": submitted && !product.valorIngresso,
+                "p-invalid": submitted && !session.valorIngresso,
               })}
             />
-            {submitted && !product.valorIngresso && (
+            {submitted && !session.valorIngresso && (
               <small className="p-error">
                 Valor do ingresso é obrigatoria.
               </small>
@@ -574,21 +635,21 @@ const TableComponent = ({ url }) => {
       </Dialog>
 
       <Dialog
-        visible={deleteProductDialog}
+        visible={modalDelete}
         style={{ width: "450px" }}
         header="Confirm"
         modal
-        footer={deleteProductDialogFooter}
-        onHide={hideDeleteProductDialog}
+        footer={modalDeleteFooter}
+        onHide={hideModalDelete}
       >
         <div className="confirmation-content">
           <i
             className="pi pi-exclamation-triangle p-mr-3"
             style={{ fontSize: "2rem" }}
           />
-          {product && (
+          {session && (
             <span>
-              Você tem certeza que deseja deletar <b>{product.name}</b>?
+              Você tem certeza que deseja deletar <b>{session.name}</b>?
             </span>
           )}
         </div>

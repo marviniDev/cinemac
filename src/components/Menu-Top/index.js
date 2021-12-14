@@ -18,29 +18,35 @@ function MenuTop({ isMenuActive, setMenuActive }) {
   return (
     <TopBar>
       <LogoApp {...{ isMenuActive }} {...{ setMenuActive }} />
-      <ContainerAvatar
-        onClick={() => {
-          setClicked(!isClicked);
-        }}
-      >
+      <div style={{ display: "flex" }}>
         <DarkMode></DarkMode>
-        <Avatar
-          label={user?.name?.substring(0, 1)}
-          style={{ background: "#0383C4", color: "#fff", borderRadius: "50%" }}
-          className="p-mr-2"
-          size="large"
-          shape="circle"
-        />
-        <i className="pi pi-angle-down p-mr-2"></i>
+        <ContainerAvatar
+          onClick={() => {
+            setClicked(!isClicked);
+          }}
+        >
+          <Avatar
+            label={user?.name?.substring(0, 1)}
+            style={{
+              background: "#0383C4",
+              color: "#fff",
+              borderRadius: "50%",
+            }}
+            className="p-mr-2"
+            size="large"
+            shape="circle"
+          />
+          <i className="pi pi-angle-down p-mr-2"></i>
 
-        <Details className="datails" isClicked={isClicked}>
-          <ul>
-            <li onClick={exitAplication}>
-              <i className="pi pi-power-off p-mr-2"></i> Sair
-            </li>
-          </ul>
-        </Details>
-      </ContainerAvatar>
+          <Details className="datails" isClicked={isClicked}>
+            <ul>
+              <li onClick={exitAplication}>
+                <i className="pi pi-power-off p-mr-2"></i> Sair
+              </li>
+            </ul>
+          </Details>
+        </ContainerAvatar>
+      </div>
       {exit ? <Redirect to="/login" /> : null}
     </TopBar>
   );

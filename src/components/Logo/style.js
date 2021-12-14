@@ -7,11 +7,13 @@ export const Flex = styled.div`
   color: var(--color-fonts-invert);
 `;
 
-export const Icon = styled.div`
+export const Icon = styled.button`
   -webkit-border-radius: 50%;
+  background: none;
   border-radius: 50%;
+  border: none;
   display: inline-block;
-  margin: 0 4px;
+  margin: 0 1em;
   padding: 12px;
   overflow: hidden;
   vertical-align: middle;
@@ -23,7 +25,7 @@ export const Icon = styled.div`
   transition: 0.3s ease-in-out;
 
   :hover {
-    background: var(--color-bg-action-menu);
+    background: var(--color-li-active);
   }
   :active {
     box-shadow: var(--box-shadow-btn-menu);

@@ -23,7 +23,7 @@ function Movie() {
 export default Movie;
 
 const TableComponent = ({ url }) => {
-  let emptyProduct = {
+  let emptyMovie = {
     id: null,
     titulo: "",
     imagem: null,
@@ -31,11 +31,11 @@ const TableComponent = ({ url }) => {
     duracao: 0,
   };
 
-  const [products, setProducts] = useState(null);
-  const [productDialog, setProductDialog] = useState(false);
-  const [deleteProductDialog, setDeleteProductDialog] = useState(false);
-  const [product, setProduct] = useState(emptyProduct);
-  const [selectedProducts, setSelectedProducts] = useState(null);
+  const [movies, setMovies] = useState([]);
+  const [modalRegister, setModalRegister] = useState(false);
+  const [modalDelete, setModalDelete] = useState(false);
+  const [movie, setMovie] = useState(emptyMovie);
+  const [selectedMovies, setSelectedMovies] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [globalFilter, setGlobalFilter] = useState(null);
   const toast = useRef(null);
@@ -44,54 +44,52 @@ const TableComponent = ({ url }) => {
 
   useEffect(() => {
     Api.get(Api.defaults.baseURL + url).then((response) => {
-      response?.data && setProducts(response.data);
+      response?.data && setMovies(response.data);
     });
   }, [submitted, url]);
 
-  const openNew = () => {
-    setProduct(emptyProduct);
+  const newMovie = () => {
+    setMovie(emptyMovie);
     setSubmitted(false);
-    setProductDialog(true);
+    setModalRegister(true);
   };
 
   const hideDialog = () => {
     setSubmitted(false);
-    setProductDialog(false);
+    setModalRegister(false);
   };
 
-  const hideDeleteProductDialog = () => {
-    setDeleteProductDialog(false);
+  const hideModalDelete = () => {
+    setModalDelete(false);
   };
 
-  const saveProduct = async () => {
+  const saveFilme = async () => {
     setSubmitted(true);
 
     if (
-      product.titulo.trim() &&
-      product.descricao.trim() &&
-      product.duracao > 0 &&
-      product.imagem != null
+      movie.titulo.trim() &&
+      movie.descricao.trim() &&
+      movie.duracao > 0 &&
+      movie.imagem != null
     ) {
-      let _products = [...products];
-      console.log(_products);
-      let _product = { ...product };
-      if (product.id) {
+      let _movie = { ...movie };
+      if (movie.id) {
         let res = await Api.post(Api.defaults.baseURL + "atualizarFilme", {
-          ..._product,
+          ..._movie,
         });
 
         if (res.data && res.data.save === "true") {
           toast.current.show({
             severity: "success",
             summary: "Tudo certo!",
-            detail: "Filme alterado com sucesso.",
+            detail: res.data.message ?? "Editado com sucesso!",
             life: 3000,
           });
         } else {
           toast.current.show({
             severity: "error",
             summary: "Algo deu errado!",
-            detail: res.data && res.data.message,
+            detail: res.data.message ?? "Falha ao editar!",
             life: 3000,
           });
         }
@@ -99,58 +97,70 @@ const TableComponent = ({ url }) => {
         setSubmitted(false);
       } else {
         let res = await Api.post(Api.defaults.baseURL + "salvarFilme", {
-          titulo: _product.titulo,
-          imagem: _product.imagem,
-          descricao: _product.descricao,
-          duracao: _product.duracao,
+          titulo: _movie.titulo,
+          imagem: _movie.imagem,
+          descricao: _movie.descricao,
+          duracao: _movie.duracao,
         });
 
         if (res.data && res.data.save === "true") {
           toast.current.show({
             severity: "success",
             summary: "Tudo certo!",
-            detail: "Filme alterado com sucesso.",
+            detail: res.data.message ?? "Cadastrado com sucesso!",
             life: 3000,
           });
         } else {
           toast.current.show({
             severity: "error",
             summary: "Algo deu errado!",
-            detail: res.data && res.data.message,
+            detail: res.data.message ?? "Falha ao cadastrar",
             life: 3000,
           });
         }
       }
 
       setSubmitted(false);
-      setProducts(_products);
-      setProductDialog(false);
-      setProduct(emptyProduct);
+      setModalRegister(false);
+      setMovie(emptyMovie);
     }
   };
 
-  const editProduct = (product) => {
-    setProduct({ ...product });
-    setProductDialog(true);
+  const editMovie = (movie) => {
+    setMovie({ ...movie });
+    setImage(movie.imagem);
+    setModalRegister(true);
   };
 
-  const confirmDeleteProduct = (product) => {
-    setProduct(product);
-    setDeleteProductDialog(true);
+  const confirmModalDelete = (movie) => {
+    setMovie(movie);
+    setModalDelete(true);
   };
 
-  const deleteProduct = async () => {
-    await Api.delete(Api.defaults.baseURL + `deletarFilme/${product.id}`);
+  const deleteFilme = async () => {
+    let res = await Api.delete(
+      Api.defaults.baseURL + `deletarFilme/${movie.id}`
+    );
+
+    if (res.data && res.data.deleted === "true") {
+      toast.current.show({
+        severity: "success",
+        summary: "Tudo certo!",
+        detail: res.data.message ?? "Excluido com sucesso!",
+        life: 3000,
+      });
+    } else {
+      toast.current.show({
+        severity: "error",
+        summary: "Algo deu errado!",
+        detail: res.data.message ?? "Falha ao excluir!",
+        life: 3000,
+      });
+    }
 
     setSubmitted(!submitted);
-    setDeleteProductDialog(false);
-    setProduct(emptyProduct);
-    toast.current.show({
-      severity: "success",
-      summary: "Tudo certo!",
-      detail: "Filme deletado com sucesso.",
-      life: 3000,
-    });
+    setModalDelete(false);
+    setMovie(emptyMovie);
   };
 
   const converter = (minutos) => {
@@ -164,12 +174,12 @@ const TableComponent = ({ url }) => {
 
   const onInputChange = (e, name) => {
     const val = (e.target && e.target.value) || "";
-    const _product = { ...product };
+    const _movie = { ...movie };
 
     if (e.target.files && e.target.files[0]) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        _product[`${name}`] = e.target.result;
+        _movie[`${name}`] = e.target.result;
         setImage(e.target.result);
       };
       reader.readAsDataURL(e.target.files[0]);
@@ -178,16 +188,13 @@ const TableComponent = ({ url }) => {
         const valueHora = e.target.value;
         const a = valueHora.split(":");
         const minutos = +a[0] * 60 + +a[1];
-        _product[`${name}`] = minutos;
+        _movie[`${name}`] = minutos;
       } else {
-        _product[`${name}`] = val;
+        _movie[`${name}`] = val;
       }
     }
 
-    console.log(e.target.value, name);
-    console.log(_product);
-
-    setProduct(_product);
+    setMovie(_movie);
   };
 
   const RightToolbarTemplate = () => {
@@ -197,7 +204,7 @@ const TableComponent = ({ url }) => {
           label="New"
           icon="pi pi-plus"
           className="p-button-success p-mr-2"
-          onClick={openNew}
+          onClick={newMovie}
         />
       </>
     );
@@ -213,7 +220,7 @@ const TableComponent = ({ url }) => {
             "https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png")
         }
         alt={rowData.imagem}
-        className="product-image"
+        className="movie-image"
       />
     );
   };
@@ -224,12 +231,12 @@ const TableComponent = ({ url }) => {
         <Button
           icon="pi pi-pencil"
           className="p-button-rounded p-button-success p-mr-2"
-          onClick={() => editProduct(rowData)}
+          onClick={() => editMovie(rowData)}
         />
         <Button
           icon="pi pi-trash"
           className="p-button-rounded p-button-warning"
-          onClick={() => confirmDeleteProduct(rowData)}
+          onClick={() => confirmModalDelete(rowData)}
         />
       </>
     );
@@ -248,7 +255,7 @@ const TableComponent = ({ url }) => {
       </span>
     </div>
   );
-  const productDialogFooter = (
+  const modalRegisterFooter = (
     <>
       <Button
         label="Cancel"
@@ -260,23 +267,23 @@ const TableComponent = ({ url }) => {
         label="Save"
         icon="pi pi-check"
         className="p-button-text"
-        onClick={saveProduct}
+        onClick={saveFilme}
       />
     </>
   );
-  const deleteProductDialogFooter = (
+  const modalDeleteFooter = (
     <>
       <Button
         label="No"
         icon="pi pi-times"
         className="p-button-text"
-        onClick={hideDeleteProductDialog}
+        onClick={hideModalDelete}
       />
       <Button
         label="Yes"
         icon="pi pi-check"
         className="p-button-text"
-        onClick={deleteProduct}
+        onClick={deleteFilme}
       />
     </>
   );
@@ -294,15 +301,15 @@ const TableComponent = ({ url }) => {
 
         <DataTable
           ref={dt}
-          value={products}
-          selection={selectedProducts}
-          onSelectionChange={(e) => setSelectedProducts(e.value)}
+          value={movies}
+          selection={selectedMovies}
+          onSelectionChange={(e) => setSelectedMovies(e.value)}
           dataKey="id"
           paginator
           rows={10}
           rowsPerPageOptions={[5, 10, 25]}
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} movies"
           globalFilter={globalFilter}
           // header={header}
           responsiveLayout="scroll"
@@ -319,18 +326,18 @@ const TableComponent = ({ url }) => {
           ></Column>
           <Column field="titulo" header="Titulo" sortable></Column>
           <Column field="descricao" header="Descrição" sortable></Column>
-          <Column field="duracao" header="Duração" sortable></Column>
+          <Column field="duracao" header="Duração (min)" sortable></Column>
           <Column body={actionBodyTemplate} exportable={false}></Column>
         </DataTable>
       </div>
 
       <Dialog
-        visible={productDialog}
+        visible={modalRegister}
         style={{ minWidth: "fit-content", minHeight: "fit-content" }}
-        header="Editar Filme"
+        header="Detalhes Filme"
         modal
         className="p-fluid"
-        footer={productDialogFooter}
+        footer={modalRegisterFooter}
         onHide={hideDialog}
       >
         <form encType="multipart/form-data">
@@ -338,13 +345,13 @@ const TableComponent = ({ url }) => {
             {image && (
               <img
                 style={{ maxWidth: "100%" }}
-                src={`${product.imagem}`}
+                src={`${movie.imagem}`}
                 onError={(e) =>
                   (e.target.src =
                     "https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png")
                 }
-                alt={product.imagem}
-                className="product-image p-d-block p-m-auto p-pb-3"
+                alt={movie.imagem}
+                className="movie-image p-d-block p-m-auto p-pb-3"
               />
             )}
           </div>
@@ -355,15 +362,15 @@ const TableComponent = ({ url }) => {
               id="imagem"
               type="file"
               accept="image/*"
-              src={product.imagem}
+              src={movie.imagem}
               onChange={(e) => onInputChange(e, "imagem")}
               required
               autoFocus
               className={classNames({
-                "p-invalid": submitted && !product.imagem,
+                "p-invalid": submitted && !movie.imagem,
               })}
             />
-            {submitted && !product.imagem && (
+            {submitted && !movie.imagem && (
               <small className="p-error">Imagem é obrigatorio.</small>
             )}
           </div>
@@ -373,15 +380,15 @@ const TableComponent = ({ url }) => {
             <InputText
               id="titulo"
               autoComplete="off"
-              value={product.titulo}
+              value={movie.titulo}
               onChange={(e) => onInputChange(e, "titulo")}
               required
               autoFocus
               className={classNames({
-                "p-invalid": submitted && !product.titulo,
+                "p-invalid": submitted && !movie.titulo,
               })}
             />
-            {submitted && !product.titulo && (
+            {submitted && !movie.titulo && (
               <small className="p-error">Titulo é obrigatorio.</small>
             )}
           </div>
@@ -390,15 +397,15 @@ const TableComponent = ({ url }) => {
             <InputText
               id="descricao"
               autoComplete="off"
-              value={product.descricao}
+              value={movie.descricao}
               onChange={(e) => onInputChange(e, "descricao")}
               required
               autoFocus
               className={classNames({
-                "p-invalid": submitted && !product.descricao,
+                "p-invalid": submitted && !movie.descricao,
               })}
             />
-            {submitted && !product.descricao && (
+            {submitted && !movie.descricao && (
               <small className="p-error">Descricao é obrigatoria.</small>
             )}
           </div>
@@ -407,15 +414,15 @@ const TableComponent = ({ url }) => {
             <InputText
               id="duracao"
               type="time"
-              value={converter(product.duracao)}
+              value={converter(movie.duracao)}
               onChange={(e) => onInputChange(e, "duracao")}
               required
               autoFocus
               className={classNames({
-                "p-invalid": submitted && !product.duracao,
+                "p-invalid": submitted && !movie.duracao,
               })}
             />
-            {submitted && !product.duracao && !product.duracao <= 0 && (
+            {submitted && !movie.duracao && !movie.duracao <= 0 && (
               <small className="p-error">Duração é obrigatoria.</small>
             )}
           </div>
@@ -423,21 +430,21 @@ const TableComponent = ({ url }) => {
       </Dialog>
 
       <Dialog
-        visible={deleteProductDialog}
+        visible={modalDelete}
         style={{ width: "450px" }}
         header="Confirm"
         modal
-        footer={deleteProductDialogFooter}
-        onHide={hideDeleteProductDialog}
+        footer={modalDeleteFooter}
+        onHide={hideModalDelete}
       >
         <div className="confirmation-content">
           <i
             className="pi pi-exclamation-triangle p-mr-3"
             style={{ fontSize: "2rem" }}
           />
-          {product && (
+          {movie && (
             <span>
-              Você tem certeza que deseja deletar <b>{product.name}</b>?
+              Você tem certeza que deseja deletar <b>{movie.name}</b>?
             </span>
           )}
         </div>

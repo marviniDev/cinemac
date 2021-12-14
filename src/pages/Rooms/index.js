@@ -64,7 +64,6 @@ const TableComponent = ({ url }) => {
     setSubmitted(true);
 
     if (product.nome.trim()) {
-      let _products = [...products];
       let _product = { ...product };
       if (product.id) {
         let res = await Api.post(Api.defaults.baseURL + "salvarSala", {
@@ -112,7 +111,6 @@ const TableComponent = ({ url }) => {
       }
 
       setSubmitted(false);
-      setProducts(_products);
       setProductDialog(false);
       setProduct(emptyProduct);
     }
@@ -265,7 +263,7 @@ const TableComponent = ({ url }) => {
       <Dialog
         visible={productDialog}
         style={{ minWidth: "fit-content", minHeight: "fit-content" }}
-        header="Editar Filme"
+        header="Detalhes Sala"
         modal
         className="p-fluid"
         footer={productDialogFooter}
