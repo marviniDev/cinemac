@@ -1,7 +1,7 @@
 import axios from "axios";
 
 var Api = axios.create({
-  baseURL: "https://7505-189-44-221-242.ngrok.io/api/",
+  baseURL: "https://moody-zebra-52.loca.lt/api/",
 });
 
 export default Api;
