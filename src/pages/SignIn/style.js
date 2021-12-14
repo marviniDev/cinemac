@@ -42,7 +42,6 @@ export const ContainerLogin = styled.div`
   -webkit-flex: 1 1 auto;
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
-  font-size: 2em;
 `;
 export const Login = styled.div`
   max-width: 35vh;
@@ -111,6 +110,7 @@ export const HeaderLogin = styled.div`
   z-index: 3;
   display: none;
   margin-bottom: 3em;
+  font-size: 2em;
 
   h1 {
     margin-bottom: 0.5em;
