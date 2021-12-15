@@ -1,8 +1,8 @@
-[Imgur](https://i.imgur.com/6YGeyHE.png?2)
-
+<p>
+  [img]https://i.imgur.com/6YGeyHE.png?2[/img]
 <div align="center">
 
-[![GitHub stars](https://img.shields.io/github/stars/guilhermecapitao/proffy-discovery)]https://github.com/marviniDev/cinemac/stargazers)<space> <space>[![GitHub license](https://img.shields.io/github/license/guilhermecapitao/proffy-discovery)](https://github.com/marviniDev/cinemac//blob/master/LICENSE)<space> <space>[![GitHub forks](https://img.shields.io/github/forks/guilhermecapitao/proffy-discovery)](https://github.com/marviniDev/cinemac//network)
+[![GitHub stars](https://img.shields.io/github/stars/marviniDev/cinemac)](https://github.com/marviniDev/cinemac/stargazers)<space> <space>[![GitHub license](https://img.shields.io/github/license/marviniDev/cinemac)](https://github.com/marviniDev/cinemac//blob/master/LICENSE)<space> <space>[![GitHub forks](https://img.shields.io/github/forks/marviniDev/cinemac)](https://github.com/marviniDev/cinemac//network)
 
 </div>
 
