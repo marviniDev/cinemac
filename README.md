@@ -1,16 +1,15 @@
 <div align="center">
-<div align="center">
 <p>
-  <img src="https://i.imgur.com/6YGeyHE.png?2" alt="cinemac"/>
+<img src="https://i.imgur.com/6YGeyHE.png?2" alt="cinemac"/>
 </p>
-  
+
 <h2>
-  CINEMAC
+CINEMAC
 </h2>
 </div>
 
 <div align="center">
-  
+
 [![GitHub stars](https://img.shields.io/github/stars/marviniDev/cinemac)](https://github.com/marviniDev/cinemac/stargazers)<space> <space>[![GitHub license](https://img.shields.io/github/license/marviniDev/cinemac)](https://github.com/marviniDev/cinemac//blob/master/LICENSE)<space> <space>[![GitHub forks](https://img.shields.io/github/forks/marviniDev/cinemac)](https://github.com/marviniDev/cinemac//network)
 
 </div>
@@ -27,7 +26,13 @@
 ## 🖥 Preview
 
 <p align="center">
-  <img src="https://ik.imagekit.io/capitao/Proffy/final_1596781937_urgAUoPC-.jpg" width="700" >
+<img src="https://i.imgur.com/GhJAmL4.png" width="700" >
+</p>
+<p align="center">
+<img src="https://i.imgur.com/Ad9p5As.png" width="700" >
+</p>
+<p align="center">
+<img src="https://i.imgur.com/RJnjw47.png" width="700" >
 </p>
 
 ---
