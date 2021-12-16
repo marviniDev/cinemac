@@ -238,7 +238,11 @@ const TableComponent = ({ url }) => {
     const val = (e.target && e.target.value) || "";
     let _session = { ...session };
 
-    _session[`${name}`] = val;
+    if (name === "data") {
+      _session[`${name}`] = dateToday(val);
+    } else {
+      _session[`${name}`] = val;
+    }
 
     setSession(_session);
   };
@@ -409,6 +413,147 @@ const TableComponent = ({ url }) => {
     </>
   );
 
+  const dataBodyTemplate = (rowData) => {
+    let newDate = [];
+    newDate = rowData.data.split("-");
+
+    let yyyy = newDate[0];
+    let mm = newDate[1];
+    let dd = newDate[2];
+
+    return (
+      <span
+        style={{
+          fontWeight: "bold",
+          padding: ".5em",
+          borderRadius: "5%",
+        }}
+      >
+        {dd + "/" + mm + "/" + yyyy}
+      </span>
+    );
+  };
+
+  const horaInicioBodyTemplate = (rowData) => {
+    return (
+      <span
+        style={{
+          fontWeight: "bold",
+          background: "#00c369",
+          padding: ".5em",
+          borderRadius: "5%",
+          color: "#fff",
+        }}
+      >
+        {rowData.horaInicio}
+      </span>
+    );
+  };
+
+  const horaFimBodyTemplate = (rowData) => {
+    return (
+      <span
+        style={{
+          fontWeight: "bold",
+          background: "#f50b4c",
+          padding: ".5em",
+          borderRadius: "5%",
+          color: "#fff",
+        }}
+      >
+        {rowData.horaFim}
+      </span>
+    );
+  };
+
+  const tipoAudioBodyTemplate = (rowData) => {
+    return (
+      <span
+        style={{
+          fontWeight: "bold",
+          padding: ".5em",
+          borderRadius: "5%",
+        }}
+      >
+        {rowData.tipoAudio}
+      </span>
+    );
+  };
+
+  const animacaoBodyTemplate = (rowData) => {
+    return (
+      <span
+        style={{
+          fontWeight: "bold",
+
+          padding: ".5em",
+          borderRadius: "5%",
+        }}
+      >
+        {rowData.animacao}
+      </span>
+    );
+  };
+
+  const valorIngressoBodyTemplate = (rowData) => {
+    var valorFormatado = rowData.valorIngresso.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+
+    return (
+      <span
+        style={{
+          fontWeight: "bold",
+          background: "#f77f00",
+          padding: ".5em",
+          borderRadius: "5%",
+          color: "#fff",
+        }}
+      >
+        {valorFormatado}
+      </span>
+    );
+  };
+
+  const filmeBodyTemplate = (rowData) => {
+    const id = rowData.filmeId;
+    const result = movies.find((Element) => Element.id === id);
+
+    return (
+      <span
+        style={{
+          fontWeight: "bold",
+          padding: ".5em",
+          borderRadius: "5%",
+        }}
+      >
+        {result && result.titulo}
+      </span>
+    );
+  };
+
+  const dateToday = (valueDate) => {
+    let newDate = [];
+    newDate = valueDate.split("-");
+
+    const date = new Date();
+    const dd = String(date.getDate()).padStart(2, "0");
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const yyyy = date.getFullYear();
+    const today = yyyy + "-" + mm + "-" + dd;
+
+    if (newDate[2] < dd) {
+      return today;
+    } else if (newDate[1] < mm) {
+      return today;
+    } else if (newDate[0] < yyyy) {
+      return today;
+    } else {
+      return valueDate;
+    }
+  };
+
   return (
     <div className="datatable-crud-demo">
       <Toast ref={toast} />
@@ -440,12 +585,48 @@ const TableComponent = ({ url }) => {
             headerStyle={{ width: "3rem" }}
             exportable={false}
           ></Column> */}
-          <Column field="data" header="Data" sortable></Column>
-          <Column field="horaInicio" header="Hora Inicial" sortable></Column>
-          <Column field="horaFim" header="Hora final" sortable></Column>
-          <Column field="tipoAudio" header="Áudio" sortable></Column>
-          <Column field="animacao" header="Animação" sortable></Column>
-          <Column field="valorIngresso" header="Ingresso(R$)" sortable></Column>
+          <Column
+            field="data"
+            body={dataBodyTemplate}
+            header="Data"
+            sortable
+          ></Column>
+          <Column
+            field="salaId"
+            body={filmeBodyTemplate}
+            header="Filme"
+            sortable
+          ></Column>
+          <Column
+            field="horaInicio"
+            body={horaInicioBodyTemplate}
+            header="Hora Inicial"
+            sortable
+          ></Column>
+          <Column
+            field="horaFim"
+            body={horaFimBodyTemplate}
+            header="Hora final"
+            sortable
+          ></Column>
+          <Column
+            field="tipoAudio"
+            body={tipoAudioBodyTemplate}
+            header="Áudio"
+            sortable
+          ></Column>
+          <Column
+            field="animacao"
+            body={animacaoBodyTemplate}
+            header="Animação"
+            sortable
+          ></Column>
+          <Column
+            field="valorIngresso"
+            body={valorIngressoBodyTemplate}
+            header="Ingresso(R$)"
+            sortable
+          ></Column>
           <Column body={actionBodyTemplate} exportable={false}></Column>
         </DataTable>
       </div>

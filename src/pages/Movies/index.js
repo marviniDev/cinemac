@@ -3,6 +3,7 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
 import { Toast } from "primereact/toast";
 import { Toolbar } from "primereact/toolbar";
 import { classNames } from "primereact/utils";
@@ -288,6 +289,22 @@ const TableComponent = ({ url }) => {
     </>
   );
 
+  const duracaoBodyTemplate = (rowData) => {
+    return (
+      <span
+        style={{
+          fontWeight: "bold",
+          background: "#F77F00",
+          padding: ".5em",
+          borderRadius: "5%",
+          color: "#fff",
+        }}
+      >
+        {rowData.duracao}min
+      </span>
+    );
+  };
+
   return (
     <div className="datatable-crud-demo">
       <Toast ref={toast} />
@@ -325,8 +342,18 @@ const TableComponent = ({ url }) => {
             body={imageBodyTemplate}
           ></Column>
           <Column field="titulo" header="Titulo" sortable></Column>
-          <Column field="descricao" header="Descrição" sortable></Column>
-          <Column field="duracao" header="Duração (min)" sortable></Column>
+          <Column
+            field="descricao"
+            header="Descrição"
+            sortable
+            style={{ maxWidth: "22em", minWidth: "25em" }}
+          ></Column>
+          <Column
+            field="duracao"
+            header="Duração (min)"
+            body={duracaoBodyTemplate}
+            sortable
+          ></Column>
           <Column body={actionBodyTemplate} exportable={false}></Column>
         </DataTable>
       </div>
@@ -394,9 +421,10 @@ const TableComponent = ({ url }) => {
           </div>
           <div className="p-field">
             <label htmlFor="descricao">Descricao</label>
-            <InputText
+            <InputTextarea
               id="descricao"
               autoComplete="off"
+              maxLength={500}
               value={movie.descricao}
               onChange={(e) => onInputChange(e, "descricao")}
               required
