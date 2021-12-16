@@ -23,15 +23,17 @@ const SignIn = () => {
 
   async function handleSubmit(data) {
     try {
-      const res = await Api.post(Api.defaults.baseURL + "autenticaUsuario", {
-        email: data.email,
-        senha: data.senha,
-      });
+      // const res = await Api.post(Api.defaults.baseURL + "autenticaUsuario", {
+      //   email: data.email,
+      //   senha: data.senha,
+      // });
 
-      if (res.status === 200 && res.data.authenticate === "true") {
+      // if (res.status === 200 && res.data.authenticate === "true") {
+
+      if (data?.email === "admin@admin.com" && data.senha === "admin") {
         const dataUser = {
-          name: res.data?.nome,
-          email: res.data?.email,
+          name: "admin",
+          email: data.email,
         };
         localStorage.setItem("@app::user", JSON.stringify(dataUser));
         setSigned(true);
