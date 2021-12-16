@@ -39,7 +39,7 @@ CINEMAC
 
 ## 📖 Sobre
 
-
+É com imenço orgulho que apresento este projeto. Cinemac é um pequeno gerenciador para cinemas, como ele é possível cadastrar, alterar e excluir filmes e sessões. Esse projeto foi desenvolvido com o intuito de apredizagem.
 
 ---
 
@@ -61,7 +61,7 @@ O projeto está desenvolvido utilizando as seguintes tecnologias:
 git clone https://github.com/marviniDev/cinemac
 
 # Entrar no diretório
-cd proffy-discovery
+cd cinemac
 
 # Baixar as dependências
 npm i
